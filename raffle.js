@@ -40,8 +40,9 @@ function csvToArray(csvString, isGift) {
       return {
         name: cells[0].trim(),
         email: cells[1].trim(),
-        photo: cells[2].trim(),
-        hasWon: false, //預設每一個人員都是未中獎狀態
+        departmentName: cells[2].trim(),
+        hasWon: cells[3].trim(), // Csv中的hasWon是中獎品項，若裡面有值，則無法參加抽獎
+        //timestampOfCSV: cells[4].trim(),
       };
     }
   }); //csvtoArrya_result 是一個array ，但每一個元素都是字典形式
@@ -98,11 +99,15 @@ function updateWinnersList() {
     //開始迖代
     const row = tableBody.insertRow(); //在html元件插入一行
     const nameCell = row.insertCell(0); //建立三個欄位
-    const prizeCell = row.insertCell(1);
-    const timestampCell = row.insertCell(2);
+    const emailCell = row.insertCell(1);
+    const departmentCell = row.insertCell(2);
+    const prizeCell = row.insertCell(3);
+    //const timestampCell = row.insertCell(4);
     nameCell.textContent = winner.name; //代入中獎者名字及獎項
+    emailCell.textContent = winner.email;
     prizeCell.textContent = winner.prize;
-    timestampCell.textContent = winner.timestamp; //代入中獎時間
+    departmentCell.textContent = winner.department;
+    //timestampCell.textContent = winner.timestamp; //代入中獎時間
   });
 }
 
@@ -185,7 +190,7 @@ function handleStoppedHighlighting(currentIndex) {
   eligibleParticipantsElements[currentIndex].style.backgroundColor = "orange"; //將中獎者高亮色彩從前一個函式設定的值 改成此行的顏色，確認已經中獎
   var winner = eligibleParticipants[currentIndex]; //設定winner 設為當次中獎人
   const winnerModalBody = document.querySelector("#winnerModal .modal-body"); //綁定彈出視窗的內容
-  winnerModalBody.textContent = `恭喜 ${winner.name} 獲得 ${currentGift.name}！`; //設定彈出視窗的訊息，並連動中動人資訊
+  winnerModalBody.textContent = `恭喜${winner.departmentName}部門, ${winner.name} 獲得 ${currentGift.name}！`; //設定彈出視窗的訊息，並連動中動人資訊
 
   const winnerModal = new bootstrap.Modal(
     document.getElementById("winnerModal")
@@ -198,6 +203,8 @@ function handleStoppedHighlighting(currentIndex) {
   winners.push({
     //將winner的資料，加入到winners之中
     name: winner.name,
+    email: winner.email,
+    department: winner.departmentName,
     prize: currentGift.name,
     timestamp: timestamp,
   });
@@ -225,9 +232,9 @@ function downloadWinnersCSV() {
 
   let bom = "\uFEFF"; // UTF-8 的 BOM
   let csvContent = "data:text/csv;charset=utf-8," + bom; // UTF-8 的 BOM
-  csvContent += "Name,Prize,Timestamp\r\n"; // 在CSV的第一行，設置Name,Prize,Timestamp
+  csvContent += "Name,ID,department,Prize,Timestamp\r\n"; // 在CSV的第一行，設置Name,Prize,Timestamp
   winners.forEach(function (winner) {
-    csvContent += `"${winner.name}","${winner.prize}","${winner.timestamp}"\r\n`; //將winners 內容迖代進csvContent之前
+    csvContent += `${winner.name},${winner.email},${winner.department},${winner.prize},${winner.timestamp}\r\n`; //將winners 內容迖代進csvContent之前
   });
   downloadCSV(filename, csvContent);
 }
@@ -253,11 +260,11 @@ function downloadNotWinnersCSV() {
 
   let bom = "\uFEFF";
   let csvContent = "data:text/csv;charset=utf-8," + bom;
-  csvContent += "Name,Email,Photo\r\n"; // CSV头部
+  csvContent += "Name,id,department,prize,timestamp\r\n"; // CSV头部
 
   const notWinners = participants.filter((p) => !p.hasWon);
   notWinners.forEach(function (participant) {
-    csvContent += `"${participant.name}","${participant.email}","${participant.photo}"\r\n`;
+    csvContent += `${participant.name},${participant.email},${participant.departmentName},${participant.hasWon},\r\n`;
   });
 
   downloadCSV(filename, csvContent);
@@ -396,7 +403,9 @@ function searchParticipant() {
       const listItem = document.createElement("li");
       listItem.className = "list-group-item";
       listItem.textContent = `${participants[i].name} (${participants[i].email})`;
-      ul.appendChild(listItem);
+      if (participants[i].hasWon == 0) {
+        ul.appendChild(listItem);
+      }
     }
   }
 }

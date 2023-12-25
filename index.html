@@ -2,7 +2,7 @@
 <html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
-    <title>Lucky Draw Rev 0.3</title>
+    <title>Lucky Draw Rev 0.3.1</title>
     <!-- 引入 Bootstrap 的 CSS -->
     <link
       rel="stylesheet"
@@ -143,7 +143,7 @@
                     aria-expanded="false"
                     aria-controls="collapseOne"
                   >
-                    抽獎人姓名是否重覆<span
+                    參加人姓名是否重覆<span
                       id="duplicateNamesCount"
                       class="badge bg-danger rounded-pill"
                       style="display: none"
@@ -175,7 +175,7 @@
                     aria-expanded="false"
                     aria-controls="collapseTwo"
                   >
-                    電子郵件是否重覆<span
+                    工號是否重覆<span
                       id="duplicateEmailCount"
                       class="badge bg-danger rounded-pill"
                       style="display: none"
@@ -267,7 +267,7 @@
     <div class="container">
       <div class="row">
         <!-- 可參加抽獎的人員名單 -->
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="d-flex align-items-center mb-2">
             <!-- 使用Bootstrap的Flexbox實現標題和搜索按鈕在同一行 -->
             <h2 class="mb-0">可参加抽獎人員</h2>
@@ -290,7 +290,7 @@
         </div>
 
         <!-- 未開出獎項 -->
-        <div class="col-md-4">
+        <div class="col-md-3">
           <h2>未開出獎項</h2>
           <div>剩餘數量: <span id="totalPrizes">0</span></div>
           <ul id="availablePrizesList" class="list-group">
@@ -299,15 +299,17 @@
         </div>
 
         <!-- 歷史中獎記錄 -->
-        <div class="col-md-4">
+        <div class="col-md-6">
           <h2>歷史中獎記錄</h2>
           <div>中獎總人數: <span id="totalWinner">0</span></div>
           <table id="winnersList" class="table">
             <thead class="table-dark">
               <tr>
                 <th>姓名</th>
+                <th>工號</th>
+                <th>部門</th>
                 <th>所獲獎品</th>
-                <th>中獎時間</th>
+                <!-- <th>中獎時間</th> -->
               </tr>
             </thead>
             <tbody>
