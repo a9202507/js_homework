@@ -2,7 +2,7 @@
 <html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
-    <title>Lucky Draw Rev 0.3.1</title>
+    <title>Lucky Draw Rev 0.4</title>
     <!-- 引入 Bootstrap 的 CSS -->
     <link
       rel="stylesheet"
@@ -81,7 +81,7 @@
           name="欄位名稱"
           placeholder="請輸入活動標題"
           aria-label="請輸入活動標題"
-          value="Lucky Draw 請輸入活動標題"
+          value="Lucky Draw Rev0.4 請輸入活動標題"
         />
       </form>
 
@@ -108,8 +108,9 @@
           class="btn btn-lg btn-primary"
           id="startRaffle-button"
         >
-          開始抽獎
+          洗牌並且抽獎
         </button>
+        <!--
         <button
           onclick="confirmRaffle()"
           class="btn btn-lg btn btn-success"
@@ -117,7 +118,7 @@
         >
           確認
         </button>
-      </div>
+      --></div>
 
       <div class="left-group">
         <button id="downloadNotWinnersCSV" class="btn btn-lg btn-info">
@@ -259,6 +260,7 @@
           <div class="modal-footer">
             <button
               type="button"
+              id="closeWinnerModalButton"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
             >

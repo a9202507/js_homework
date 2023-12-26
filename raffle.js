@@ -9,7 +9,7 @@ var total_winner = 0;
 function readFile(input, isGift) {
   const file = input.files[0]; // input 為使用者傳入的複數檔案 此處只選用傳入的第一個檔案
   const reader = new FileReader(); //使用 javascript 的FileRader物件
-  document.getElementById("confirmRaffle-button").disabled = true; //將網頁上的確認按鈕 暫時取消點擊功能
+  //document.getElementById("confirmRaffle-button").disabled = true; //將網頁上的確認按鈕 暫時取消點擊功能
 
   reader.onload = function (event) {
     //event 在此為line24 reader.readAsText(file)所觸發的load 事件
@@ -183,30 +183,35 @@ function startRaffle() {
     const errorModal = new bootstrap.Modal(errorModalElement); //顯示錯誤彈出視窗
     errorModal.show();
   } else {
-    performRaffle(); //若人員.csv and 獎品.csv都上傳，則執行performraffle函式
+    performRaffle((index = 0)); //若人員.csv and 獎品.csv都上傳，則執行performraffle函式
   }
 }
-
+/*
 function performRaffle() {
-  document.getElementById("startRaffle-button").disabled = true; //執行後，將洗牌按接鈕跟確認按鈕取消點選功能，做介面的防呆
-  document.getElementById("randomSorting-button").disabled = true;
+  // ...現有的代碼...
 
-  const eligibleParticipants = participants.filter((p) => !p.hasWon); //篩選函式filter, 把participants裡面 haswon不為真的人名拉出來。 // !p.hasWon的! 是 log gate NOT 的操作
-  const currentGift = gifts.find((g) => g.quantity > 0); //找到第一個禮物數量大於零的禮物，拿出來抽獎。
   var eligibleParticipantsElements = document.getElementById(
     "eligibleParticipantsList"
-  ).children; //將html中可參加抽獎的人員列表，全部綁定到 eligibleParticipantsElements
+  ).children;
   var index = 0;
 
-  //對人員列表，輪流高亮
+  // 更新高亮顯示的人名並滾動頁面
   const intervalId = setInterval(function () {
-    // 建立intervalID 物件，執行serInterval函式
-    index = (index + 1) % eligibleParticipantsElements.length;
-    for (var i = 0; i < eligibleParticipantsElements.length; i++) {
-      eligibleParticipantsElements[i].style.backgroundColor =
-        i === index ? "yellow" : "";
+    if (index < eligibleParticipantsElements.length) {
+      // 移除前一個高亮的類
+      if (index > 0) {
+        eligibleParticipantsElements[index - 1].classList.remove("highlight");
+      }
+      // 添加新的高亮的類
+      eligibleParticipantsElements[index].classList.add("highlight");
+      // 滾動到新的高亮元素
+      eligibleParticipantsElements[index].scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      index++;
     }
-  }, 100);
+  }, 300); // 每100毫秒更新一次
 
   const during_time = Math.floor(Math.random() * (7000 - 3000 + 1)) + 3000; // 生成3到7秒之間的隨機時間
 
@@ -228,6 +233,59 @@ function performRaffle() {
     return;
   }
   total_winner++; //抽獎完後，將中獎人數+1
+}
+*/
+
+function performRaffle(index) {
+  document.getElementById("startRaffle-button").disabled = true; //執行後，將洗牌按接鈕跟確認按鈕取消點選功能，做介面的防呆
+  document.getElementById("randomSorting-button").disabled = true;
+
+  sortEligibleParticipantsListByRandom();
+
+  const eligibleParticipants = participants.filter((p) => !p.hasWon); //篩選函式filter, 把participants裡面 haswon不為真的人名拉出來。 // !p.hasWon的! 是 log gate NOT 的操作
+  const currentGift = gifts.find((g) => g.quantity > 0); //找到第一個禮物數量大於零的禮物，拿出來抽獎。
+  var eligibleParticipantsElements = document.getElementById(
+    "eligibleParticipantsList"
+  ).children; //將html中可參加抽獎的人員列表，全部綁定到 eligibleParticipantsElements
+  //var index = 0;
+
+  //對人員列表，輪流高亮
+  const intervalId = setInterval(function () {
+    // 建立intervalID 物件，執行serInterval函式
+    index = (index + 1) % eligibleParticipantsElements.length;
+    for (var i = 0; i < eligibleParticipantsElements.length; i++) {
+      eligibleParticipantsElements[i].style.backgroundColor =
+        i === index ? "yellow" : "";
+    }
+
+    //讓視窗跟著光標跑
+    eligibleParticipantsElements[index].scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }, 250);
+
+  const during_time = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000; // 生成5到10秒之間的隨機時間
+
+  const slowDownTime = during_time - 1000; // 設置第二段時間點並減慢輪流高亮的速度
+
+  setTimeout(() => {
+    clearInterval(intervalId); // 停止間隔
+    handleStoppedHighlighting(index); // 輸出當前的人員index，並由下一個函式接手
+  }, during_time);
+
+  if (eligibleParticipants.length === 0) {
+    // 若沒有未中獎人員，或沒有獎品了，則無法再抽獎
+    document.getElementById("result").innerHTML = "沒有更多人可以參加抽獎了！";
+    return;
+  }
+
+  if (!currentGift) {
+    document.getElementById("result").innerHTML = "所有獎品都抽完了！";
+    return;
+  }
+  total_winner++; //抽獎完後，將中獎人數+1
+  return index;
 }
 
 function handleStoppedHighlighting(currentIndex) {
@@ -260,7 +318,7 @@ function handleStoppedHighlighting(currentIndex) {
     timestamp: timestamp,
   });
 
-  document.getElementById("confirmRaffle-button").disabled = false; //抽獎完成後，啟動confirm 按鈕，用做UI流程控制。
+  //document.getElementById("confirmRaffle-button").disabled = false; //抽獎完成後，啟動confirm 按鈕，用做UI流程控制。
 }
 
 //當name.csv 檔名出現時，執行readFile函式
@@ -290,11 +348,19 @@ function downloadWinnersCSV() {
   downloadCSV(filename, csvContent);
 }
 
+// 等待DOM載入完畢
+document.addEventListener("DOMContentLoaded", (event) => {
+  // 通過ID選擇按鈕並綁定click事件
+  const closeModalButton = document.getElementById("closeWinnerModalButton");
+  closeModalButton.addEventListener("click", confirmRaffle);
+});
+
 function confirmRaffle() {
   //設定按下確認接鈕後的動作，做為UI流程控制
   document.getElementById("startRaffle-button").disabled = false; //啟用抽獎跟洗牌按鈕，取消確認按鈕
-  document.getElementById("confirmRaffle-button").disabled = true;
+  //document.getElementById("confirmRaffle-button").disabled = true;
   document.getElementById("randomSorting-button").disabled = false;
+  window.scroll(0, 0);
 
   updateEligibleParticipantsList(); //刷新可抽獎人員/可抽禮物/中獎人員名單
   updateAvailablePrizesList();
@@ -342,9 +408,7 @@ function sortEligibleParticipantsListByRandom() {
 document
   .getElementById("downloadNotWinnersCSV")
   .addEventListener("click", downloadNotWinnersCSV);
-document
-  .getElementById("confirmRaffle-button")
-  .addEventListener("click", confirmRaffle);
+//document.getElementById("confirmRaffle-button").addEventListener("click", confirmRaffle);
 document
   .getElementById("randomSorting-button")
   .addEventListener("click", sortEligibleParticipantsListByRandom);
