@@ -57,6 +57,11 @@
         text-align: center; /* 置中form */
       }
 
+      .modal-body {
+        font-size: 36px; /* 例如放大正文字体 */
+        color: #000000; /* 设置文字颜色为黑色 */
+      }
+
       @media (max-width: 768px) {
         .responsive-input {
           font-size: 24px; /* 小屏幕時降低字體大小 */
@@ -81,7 +86,7 @@
           name="欄位名稱"
           placeholder="請輸入活動標題"
           aria-label="請輸入活動標題"
-          value="Lucky Draw Rev0.4.1 請輸入活動標題"
+          value="Rev0.4.1 亂數為3秒~30秒之間"
         />
       </form>
 
@@ -243,7 +248,7 @@
       aria-labelledby="winnerModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="winnerModalLabel">中獎通知</h5>

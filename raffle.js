@@ -85,7 +85,7 @@ function csvToArray(csvString, isGift) {
 
       //設置彈出視窗的錯誤訊息
 
-      errorModalMessageElement.textContent = `csv檔異常，有可能是人員.csv第一行欄位名稱未滿五欄。也請檢查第 ${
+      errorModalMessageElement.textContent = `csv檔異常，請確認人員.csv第一行欄位數量至少五欄。也請檢查第 ${
         index + 2
       }行的資料，是否有空白欄位存在.`;
 
@@ -263,9 +263,10 @@ function performRaffle(index) {
       behavior: "smooth",
       block: "center",
     });
-  }, 250);
+  }, 200);
 
-  const during_time = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000; // 生成5到10秒之間的隨機時間
+  const during_time = Math.floor(Math.random() * (30000 - 3000 + 1)) + 3000; // 生成5到10秒之間的隨機時間
+  console.log(during_time);
 
   const slowDownTime = during_time - 1000; // 設置第二段時間點並減慢輪流高亮的速度
 
@@ -299,7 +300,7 @@ function handleStoppedHighlighting(currentIndex) {
   eligibleParticipantsElements[currentIndex].style.backgroundColor = "orange"; //將中獎者高亮色彩從前一個函式設定的值 改成此行的顏色，確認已經中獎
   var winner = eligibleParticipants[currentIndex]; //設定winner 設為當次中獎人
   const winnerModalBody = document.querySelector("#winnerModal .modal-body"); //綁定彈出視窗的內容
-  winnerModalBody.textContent = `恭喜${winner.departmentName}部門, ${winner.name} 獲得 ${currentGift.name}！`; //設定彈出視窗的訊息，並連動中動人資訊
+  winnerModalBody.textContent = `恭喜 ${winner.departmentName} 部門,${winner.name} 獲得 ${currentGift.name}！`; //設定彈出視窗的訊息，並連動中動人資訊
 
   const winnerModal = new bootstrap.Modal(
     document.getElementById("winnerModal")
