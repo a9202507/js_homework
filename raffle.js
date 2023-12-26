@@ -26,6 +26,8 @@ function readFile(input, isGift) {
   reader.readAsText(file); // 產生event 觸發line13的onliad操作 此為建議之寫法
 }
 //csv to array 函式
+
+/*
 function csvToArray(csvString, isGift) {
   const rows = csvString.trim().split("\n").slice(1); //輸出一個arry，每一個元素都是字串，代表的是csv中的一行。 trim 將文字的前後空格去除 split(\n)利用換行符號切割字串 slice(1)從第二行開始保留，若為slice(0)則保留第一行的標題
   var csvtoArray_result = rows.map((row) => {
@@ -47,6 +49,55 @@ function csvToArray(csvString, isGift) {
     }
   }); //csvtoArrya_result 是一個array ，但每一個元素都是字典形式
   return csvtoArray_result;
+}
+*/
+
+function csvToArray(csvString, isGift) {
+  const rows = csvString.trim().split("\n").slice(1);
+  var csvToArrayResult = rows.map((row, index) => {
+    // index is the line number starting from 0
+    try {
+      const cells = row.split(",");
+      if (cells[0].trim() === "") {
+        throw new Error("Name field is empty");
+      }
+
+      if (isGift) {
+        return {
+          name: cells[0].trim(),
+          quantity: parseInt(cells[1], 10),
+        };
+      } else {
+        return {
+          name: cells[0].trim(),
+          email: cells[1].trim(),
+          departmentName: cells[2].trim(),
+          hasWon: cells[3].trim(),
+        };
+      }
+    } catch (error) {
+      // Log the error with the line number. Note that index starts from 0, so add 1 to represent the actual line number.
+      //console.error(`Error in line ${index + 2}: ${row}. Error message: ${error.message}`);
+
+      const errorModalElement = document.getElementById("errorModal"); //綁定index.html下的errorModal元件
+      const errorModalMessageElement =
+        document.getElementById("errorModalMessage"); //綁定index.html下的errorModalMessage元件
+
+      //設置彈出視窗的錯誤訊息
+
+      errorModalMessageElement.textContent = `csv檔異常，請檢查第 ${
+        index + 2
+      }行的資料，是否有空白欄位存在.`;
+
+      const errorModal = new bootstrap.Modal(errorModalElement); //顯示錯誤彈出視窗
+      errorModal.show();
+      // Return null or an error object for that row
+      return { error: `Line ${index + 2}: ${error.message}` };
+    }
+  });
+
+  // This will include rows with errors in the result, marked with an error property.
+  return csvToArrayResult;
 }
 
 function updateEligibleParticipantsList() {
