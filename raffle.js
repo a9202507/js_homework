@@ -85,7 +85,7 @@ function csvToArray(csvString, isGift) {
 
       //設置彈出視窗的錯誤訊息
 
-      errorModalMessageElement.textContent = `csv檔異常，請檢查第 ${
+      errorModalMessageElement.textContent = `csv檔異常，有可能是人員.csv第一行欄位名稱未滿五欄。也請檢查第 ${
         index + 2
       }行的資料，是否有空白欄位存在.`;
 
