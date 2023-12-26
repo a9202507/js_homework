@@ -36,6 +36,9 @@
       .right-group {
         float: right;
       }
+      .left-group {
+        float: left;
+      }
 
       .highlight {
         background-color: #ff0;
@@ -96,32 +99,34 @@
         >
         <input type="file" class="form-control" id="giftsFile" accept=".csv" />
       </div>
-      <button id="randomSorting-button" class="btn btn-lg btn-warning">
-        洗牌
-      </button>
-      <button
-        onclick="startRaffle()"
-        class="btn btn-lg btn-primary"
-        id="startRaffle-button"
-      >
-        開始抽獎
-      </button>
-      <button
-        onclick="confirmRaffle()"
-        class="btn btn-lg btn btn-success"
-        id="confirmRaffle-button"
-      >
-        確認
-      </button>
-
       <div class="right-group">
-        <button id="downloadNotWinnersCSV" class="btn btn-info">
+        <button id="randomSorting-button" class="btn btn-lg btn-warning">
+          洗牌
+        </button>
+        <button
+          onclick="startRaffle()"
+          class="btn btn-lg btn-primary"
+          id="startRaffle-button"
+        >
+          開始抽獎
+        </button>
+        <button
+          onclick="confirmRaffle()"
+          class="btn btn-lg btn btn-success"
+          id="confirmRaffle-button"
+        >
+          確認
+        </button>
+      </div>
+
+      <div class="left-group">
+        <button id="downloadNotWinnersCSV" class="btn btn-lg btn-info">
           下載未中獎人員名單
         </button>
         <button
           id="downloadCSV"
           onclick="downloadWinnersCSV()"
-          class="btn btn-info"
+          class="btn btn-lg btn-info"
         >
           下載中獎名單
         </button>
@@ -132,7 +137,7 @@
       <div class="accordion" id="accordionExample">
         <div class="container">
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
                   <button
@@ -143,7 +148,7 @@
                     aria-expanded="false"
                     aria-controls="collapseOne"
                   >
-                    參加人姓名是否重覆<span
+                    姓名是否重覆<span
                       id="duplicateNamesCount"
                       class="badge bg-danger rounded-pill"
                       style="display: none"
@@ -164,7 +169,7 @@
               </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
                   <button
