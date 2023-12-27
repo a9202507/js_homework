@@ -2,7 +2,7 @@
 <html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
-    <title>Lucky Draw Rev0.4.1</title>
+    <title>Lucky Draw Rev0.4.2</title>
     <!-- 引入 Bootstrap 的 CSS -->
     <link
       rel="stylesheet"
@@ -67,6 +67,10 @@
           font-size: 24px; /* 小屏幕時降低字體大小 */
         }
       }
+
+      .custom-width {
+      width: 150px; /* 或者任何您需要的寬度 */
+      }
     </style>
   </head>
   <body class="bg-light">
@@ -86,7 +90,7 @@
           name="欄位名稱"
           placeholder="請輸入活動標題"
           aria-label="請輸入活動標題"
-          value="Rev0.4.1 亂數為3秒~30秒之間"
+          value="Rev0.4.2 可輸入最大抽獎秒數"
         />
       </form>
 
@@ -104,7 +108,15 @@
         >
         <input type="file" class="form-control" id="giftsFile" accept=".csv" />
       </div>
-      <div class="right-group">
+      
+        <div class="right-group d-flex align-items-center">
+          <!-- New input group for entering draw seconds -->
+          <div class="col-auto custom-width">
+          <div class="input-group me-1">
+            <span class="input-group-text" id="drawSecondsLabel">Running Sec</span>
+            <input id="drawSecondvalue" type="text" class="form-control" value="7" aria-label="Draw seconds" aria-describedby="drawSecondsLabel">
+          </div>
+          </div>
         <button id="randomSorting-button" class="btn btn-lg btn-warning">
           洗牌
         </button>
@@ -123,18 +135,17 @@
         >
           確認
         </button>
-      --></div>
+          -->
+      </div>
 
+        <!--下載結果名單-->
       <div class="left-group">
-        <button id="downloadNotWinnersCSV" class="btn btn-lg btn-info">
-          下載未中獎人員名單
-        </button>
         <button
-          id="downloadCSV"
-          onclick="downloadWinnersCSV()"
+          id="downResultCSV"
+          onclick="downloadResultCSV()"
           class="btn btn-lg btn-info"
         >
-          下載中獎名單
+          Download Lucky Draw result
         </button>
       </div>
       <div id="result" class="mt-3"></div>
@@ -154,7 +165,7 @@
                     aria-expanded="false"
                     aria-controls="collapseOne"
                   >
-                    姓名是否重覆<span
+                    Name check<span
                       id="duplicateNamesCount"
                       class="badge bg-danger rounded-pill"
                       style="display: none"
@@ -175,7 +186,7 @@
               </div>
             </div>
 
-            <div class="col-md-5">
+            <div class="col-md-4">
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
                   <button
@@ -186,7 +197,7 @@
                     aria-expanded="false"
                     aria-controls="collapseTwo"
                   >
-                    工號是否重覆<span
+                    ID check<span
                       id="duplicateEmailCount"
                       class="badge bg-danger rounded-pill"
                       style="display: none"
@@ -209,7 +220,6 @@
           </div>
         </div>
       </div>
-    </div>
 
     <!-- 錯誤提示彈出視窗 -->
     <div class="modal" tabindex="-1" id="errorModal">

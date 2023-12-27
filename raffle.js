@@ -73,6 +73,7 @@ function csvToArray(csvString, isGift) {
           email: cells[1].trim(),
           departmentName: cells[2].trim(),
           hasWon: cells[3].trim(),
+          timeStamp: cells[4].trim(),
         };
       }
     } catch (error) {
@@ -265,7 +266,10 @@ function performRaffle(index) {
     });
   }, 200);
 
-  const during_time = Math.floor(Math.random() * (30000 - 3000 + 1)) + 3000; // 生成5到10秒之間的隨機時間
+  var maxRunningTime =
+    parseInt(document.getElementById("drawSecondvalue").value, 10) * 1000;
+  maxRunningTime += 1;
+  const during_time = Math.floor(Math.random() * maxRunningTime); // 生成5到10秒之間的隨機時間
   console.log(during_time);
 
   const slowDownTime = during_time - 1000; // 設置第二段時間點並減慢輪流高亮的速度
@@ -309,7 +313,7 @@ function handleStoppedHighlighting(currentIndex) {
 
   winner.hasWon = true; //將該中獎人設為已中獎
   currentGift.quantity -= 1; //減少當前獎項的數量
-  const timestamp = new Date().toLocaleString(); //設定得獎時間標記
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); //設定得獎時間標記
   winners.push({
     //將winner的資料，加入到winners之中
     name: winner.name,
@@ -319,7 +323,27 @@ function handleStoppedHighlighting(currentIndex) {
     timestamp: timestamp,
   });
 
+  updateParticipantWinStatus(participants, winner.email, currentGift.name);
+
   //document.getElementById("confirmRaffle-button").disabled = false; //抽獎完成後，啟動confirm 按鈕，用做UI流程控制。
+}
+
+function updateParticipantWinStatus(participants, findTheEmailText, prizeName) {
+  // Step 1: Find the participant in the array
+  let participant = participants.find((p) => p.email === findTheEmailText);
+
+  // Step 2: Check if the participant was found
+  if (participant) {
+    // Step 3: Update the hasWon property
+    participant.hasWon = prizeName;
+    participant.timeStamp = new Date().toISOString().replace(/[:.]/g, "-");
+    console.log(
+      `Participant ${findTheEmailText} hasWon status updated to ${prizeName}`
+    );
+  } else {
+    // Step 4: Handle the participant not found
+    console.log(`Participant with name ${findTheEmailText} not found.`);
+  }
 }
 
 //當name.csv 檔名出現時，執行readFile函式
@@ -334,6 +358,29 @@ document
   .addEventListener("change", function (event) {
     readFile(event.target, true);
   });
+
+function downloadResultCSV() {
+  //downloadWinnersCSV();
+  //downloadNotWinnersCSV();
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); //輸出 2023-12-23T19-30-25-000Z 格式的時間戳記
+  const main_title = document.getElementById("main_title").value; //取回網頁上活動標題的內文
+  const filename = `${main_title}_result_${timestamp}.csv`; //設定存檔檔名為 活動標題加上時間戳記
+
+  let bom = "\uFEFF"; // UTF-8 的 BOM
+  let csvContent = "data:text/csv;charset=utf-8," + bom; // UTF-8 的 BOM
+  csvContent += "Name,ID,department,Prize,Timestamp\r\n"; // 在CSV的第一行，設置Name,Prize,Timestamp
+
+  /*
+  winners.forEach(function (winner) {
+    csvContent += `${winner.name},${winner.email},${winner.department},${winner.prize},${winner.timestamp}\r\n`; //將winners 內容迖代進csvContent之前
+    console.log("winner timestamp is" + winner.timestamp);
+  });
+*/
+  participants.forEach(function (participant) {
+    csvContent += `${participant.name},${participant.email},${participant.departmentName},${participant.hasWon},${participant.timeStamp},\r\n`;
+  });
+  downloadCSV(filename, csvContent);
+}
 
 function downloadWinnersCSV() {
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); //輸出 2023-12-23T19-30-25-000Z 格式的時間戳記
@@ -380,9 +427,9 @@ function downloadNotWinnersCSV() {
   let csvContent = "data:text/csv;charset=utf-8," + bom;
   csvContent += "Name,id,department,prize,timestamp\r\n"; // CSV头部
 
-  const notWinners = participants.filter((p) => !p.hasWon);
-  notWinners.forEach(function (participant) {
-    csvContent += `${participant.name},${participant.email},${participant.departmentName},${participant.hasWon},\r\n`;
+  //const notWinners = participants.filter((p) => !p.hasWon);
+  participants.forEach(function (participant) {
+    csvContent += `${participant.name},${participant.email},${participant.departmentName},${participant.hasWon},${participant.timeStamp},\r\n`;
   });
 
   downloadCSV(filename, csvContent);
@@ -406,9 +453,7 @@ function sortEligibleParticipantsListByRandom() {
 
   updateEligibleParticipantsList();
 }
-document
-  .getElementById("downloadNotWinnersCSV")
-  .addEventListener("click", downloadNotWinnersCSV);
+
 //document.getElementById("confirmRaffle-button").addEventListener("click", confirmRaffle);
 document
   .getElementById("randomSorting-button")
@@ -525,3 +570,29 @@ function searchParticipant() {
     }
   }
 }
+
+// 轉換時區
+Date.prototype.toISOString = function () {
+  let pad = (n) => (n < 10 ? "0" + n : n);
+  let hours_offset = this.getTimezoneOffset() / 60;
+  let offset_date = this.setHours(this.getHours() - hours_offset);
+  let symbol = hours_offset >= 0 ? "-" : "+";
+  let time_zone = symbol + pad(Math.abs(hours_offset)) + ":00";
+
+  return (
+    this.getUTCFullYear() +
+    "-" +
+    pad(this.getUTCMonth() + 1) +
+    "-" +
+    pad(this.getUTCDate()) +
+    "T" +
+    pad(this.getUTCHours()) +
+    ":" +
+    pad(this.getUTCMinutes()) +
+    ":" +
+    pad(this.getUTCSeconds()) +
+    "." +
+    (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) +
+    time_zone
+  );
+};
