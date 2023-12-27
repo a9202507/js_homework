@@ -58,7 +58,7 @@
       }
 
       .modal-body {
-        font-size: 36px; /* 例如放大正文字体 */
+        font-size: 72px; /* 例如放大正文字体 */
         color: #000000; /* 设置文字颜色为黑色 */
       }
 
@@ -69,8 +69,12 @@
       }
 
       .custom-width {
-      width: 150px; /* 或者任何您需要的寬度 */
+      width: 170px; /* 或者任何您需要的寬度 */
       }
+
+      .button-right-group button {
+      margin-left: 10px;
+     }
     </style>
   </head>
   <body class="bg-light">
@@ -109,7 +113,7 @@
         <input type="file" class="form-control" id="giftsFile" accept=".csv" />
       </div>
       
-        <div class="right-group d-flex align-items-center">
+        <div class="right-group d-flex align-items-center button-right-group">
           <!-- New input group for entering draw seconds -->
           <div class="col-auto custom-width">
           <div class="input-group me-1">
@@ -258,7 +262,7 @@
       aria-labelledby="winnerModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-centered" style="max-width: 80%;">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="winnerModalLabel">中獎通知</h5>
