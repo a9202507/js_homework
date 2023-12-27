@@ -25,33 +25,8 @@ function readFile(input, isGift) {
 
   reader.readAsText(file); // 產生event 觸發line13的onliad操作 此為建議之寫法
 }
+
 //csv to array 函式
-
-/*
-function csvToArray(csvString, isGift) {
-  const rows = csvString.trim().split("\n").slice(1); //輸出一個arry，每一個元素都是字串，代表的是csv中的一行。 trim 將文字的前後空格去除 split(\n)利用換行符號切割字串 slice(1)從第二行開始保留，若為slice(0)則保留第一行的標題
-  var csvtoArray_result = rows.map((row) => {
-    //map是array型別的一個方法，用來迖代 for row in rows 來執行{}的內容
-    const cells = row.split(","); //將每一個array元素，用逗號切開，切開後第一個元素就是name第二個就是quantity 給禮物清單，依次。
-    if (isGift) {
-      return {
-        name: cells[0].trim(),
-        quantity: parseInt(cells[1], 10),
-      };
-    } else {
-      return {
-        name: cells[0].trim(),
-        email: cells[1].trim(),
-        departmentName: cells[2].trim(),
-        hasWon: cells[3].trim(), // Csv中的hasWon是中獎品項，若裡面有值，則無法參加抽獎
-        //timestampOfCSV: cells[4].trim(),
-      };
-    }
-  }); //csvtoArrya_result 是一個array ，但每一個元素都是字典形式
-  return csvtoArray_result;
-}
-*/
-
 function csvToArray(csvString, isGift) {
   const rows = csvString.trim().split("\n").slice(1);
   var csvToArrayResult = rows.map((row, index) => {
@@ -187,55 +162,6 @@ function startRaffle() {
     performRaffle((index = 0)); //若人員.csv and 獎品.csv都上傳，則執行performraffle函式
   }
 }
-/*
-function performRaffle() {
-  // ...現有的代碼...
-
-  var eligibleParticipantsElements = document.getElementById(
-    "eligibleParticipantsList"
-  ).children;
-  var index = 0;
-
-  // 更新高亮顯示的人名並滾動頁面
-  const intervalId = setInterval(function () {
-    if (index < eligibleParticipantsElements.length) {
-      // 移除前一個高亮的類
-      if (index > 0) {
-        eligibleParticipantsElements[index - 1].classList.remove("highlight");
-      }
-      // 添加新的高亮的類
-      eligibleParticipantsElements[index].classList.add("highlight");
-      // 滾動到新的高亮元素
-      eligibleParticipantsElements[index].scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-      index++;
-    }
-  }, 300); // 每100毫秒更新一次
-
-  const during_time = Math.floor(Math.random() * (7000 - 3000 + 1)) + 3000; // 生成3到7秒之間的隨機時間
-
-  const slowDownTime = during_time - 1000; // 設置第二段時間點並減慢輪流高亮的速度
-
-  setTimeout(() => {
-    clearInterval(intervalId); // 停止間隔
-    handleStoppedHighlighting(index); // 輸出當前的人員index，並由下一個函式接手
-  }, during_time);
-
-  if (eligibleParticipants.length === 0) {
-    // 若沒有未中獎人員，或沒有獎品了，則無法再抽獎
-    document.getElementById("result").innerHTML = "沒有更多人可以參加抽獎了！";
-    return;
-  }
-
-  if (!currentGift) {
-    document.getElementById("result").innerHTML = "所有獎品都抽完了！";
-    return;
-  }
-  total_winner++; //抽獎完後，將中獎人數+1
-}
-*/
 
 function performRaffle(index) {
   document.getElementById("startRaffle-button").disabled = true; //執行後，將洗牌按接鈕跟確認按鈕取消點選功能，做介面的防呆
@@ -361,8 +287,6 @@ document
   });
 
 function downloadResultCSV() {
-  //downloadWinnersCSV();
-  //downloadNotWinnersCSV();
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); //輸出 2023-12-23T19-30-25-000Z 格式的時間戳記
   const main_title = document.getElementById("main_title").value; //取回網頁上活動標題的內文
   const filename = `${main_title}_result_${timestamp}.csv`; //設定存檔檔名為 活動標題加上時間戳記
@@ -371,12 +295,6 @@ function downloadResultCSV() {
   let csvContent = "data:text/csv;charset=utf-8," + bom; // UTF-8 的 BOM
   csvContent += "Name,ID,department,Prize,Timestamp\r\n"; // 在CSV的第一行，設置Name,Prize,Timestamp
 
-  /*
-  winners.forEach(function (winner) {
-    csvContent += `${winner.name},${winner.email},${winner.department},${winner.prize},${winner.timestamp}\r\n`; //將winners 內容迖代進csvContent之前
-    console.log("winner timestamp is" + winner.timestamp);
-  });
-*/
   participants.forEach(function (participant) {
     csvContent += `${participant.name},${participant.email},${participant.departmentName},${participant.hasWon},${participant.timeStamp},\r\n`;
   });
