@@ -193,9 +193,13 @@ function performRaffle(index) {
   }, 200);
 
   var maxRunningTime =
-    parseInt(document.getElementById("drawSecondvalue").value, 10) * 1000;
-  maxRunningTime += 1;
-  const during_time = Math.floor(Math.random() * maxRunningTime); // 生成5到10秒之間的隨機時間
+    parseInt(document.getElementById("drawSecondvalueMax").value, 10) * 1000;
+  var minRunningTime =
+    parseInt(document.getElementById("drawSecondvalueMin").value, 10) * 1000;
+  //const during_time = Math.floor(Math.random() * maxRunningTime); // 生成5到10秒之間的隨機時間
+  const during_time =
+    Math.floor(Math.random() * (maxRunningTime - minRunningTime + 1)) +
+    minRunningTime;
   console.log(during_time);
 
   const slowDownTime = during_time - 1000; // 設置第二段時間點並減慢輪流高亮的速度
@@ -231,7 +235,7 @@ function handleStoppedHighlighting(currentIndex) {
   var winner = eligibleParticipants[currentIndex]; //設定winner 設為當次中獎人
   const winnerModalBody = document.querySelector("#winnerModal .modal-body"); //綁定彈出視窗的內容
   //winnerModalBody.textContent = `恭喜 \n${winner.departmentName} 部門,${winner.name}獲得 ${currentGift.name}！`; //設定彈出視窗的訊息，並連動中動人資訊
-  winnerModalBody.innerHTML = `恭喜 <span style="color: blue;">${winner.departmentName}</span> 部門<br><span style="color: red;">${winner.name}</span> 獲得 ${currentGift.name}！`;
+  winnerModalBody.innerHTML = `恭喜 <span style="color: red;">${winner.departmentName}</span> 部門<br><strong><span style="color: blue;">${winner.name}</span></strong> 獲得 ${currentGift.name}！`;
 
   const winnerModal = new bootstrap.Modal(
     document.getElementById("winnerModal")
@@ -335,6 +339,8 @@ function confirmRaffle() {
 
   document.getElementById("totalWinner").textContent = total_winner; //更新中獎總人數
 }
+
+function cancelRaffle() {}
 
 function downloadNotWinnersCSV() {
   //操作邏輯同前

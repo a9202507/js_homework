@@ -2,7 +2,7 @@
 <html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
-    <title>Lucky Draw Rev0.4.2</title>
+    <title>Lucky Draw Rev0.4.3</title>
     <!-- 引入 Bootstrap 的 CSS -->
     <link
       rel="stylesheet"
@@ -69,7 +69,7 @@
       }
 
       .custom-width {
-      width: 170px; /* 或者任何您需要的寬度 */
+      width: 270px; /* 或者任何您需要的寬度 */
       }
 
       .button-right-group button {
@@ -94,7 +94,7 @@
           name="欄位名稱"
           placeholder="請輸入活動標題"
           aria-label="請輸入活動標題"
-          value="Rev0.4.2 可輸入最大抽獎秒數"
+          value="Rev0.4.3 可輸入抽獎秒數最小值~最大值"
         />
       </form>
 
@@ -117,8 +117,12 @@
           <!-- New input group for entering draw seconds -->
           <div class="col-auto custom-width">
           <div class="input-group me-1">
-            <span class="input-group-text" id="drawSecondsLabel">Running Sec</span>
-            <input id="drawSecondvalue" type="text" class="form-control" value="7" aria-label="Draw seconds" aria-describedby="drawSecondsLabel">
+          <!--<span class="input-group-text" id="drawSecondsLabel">Running Sec</span>
+            <input id="drawSecondvalue" type="text" class="form-control" value="7" aria-label="Draw seconds" aria-describedby="drawSecondsLabel"> -->
+          <span class="input-group-text" id="drawSecondsLabel">Running min/max Sec</span>
+            <input id="drawSecondvalueMin"type="text" aria-label="Minimum seconds" class="form-control" value="2">
+            <input id="drawSecondvalueMax"type="text" aria-label="Maximum seconds" class="form-control" value="8">
+          
           </div>
           </div>
         <button id="randomSorting-button" class="btn btn-lg btn-warning">
@@ -252,29 +256,49 @@
       tabindex="-1"
       aria-labelledby="winnerModalLabel"
       aria-hidden="true"
-    >
+      data-bs-backdrop="static" 
+      data-bs-keyboard="false" 
+    > <!--data-backdrop="static" 这里禁止点击外部关闭Modal  data-keyboard="false" 这里禁止键盘事件（比如ESC键）关闭Modal -->
       <div class="modal-dialog modal-dialog-centered" style="max-width: 80%;">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="winnerModalLabel">中獎通知</h5>
-            <button
+
+
+            <!-- 以下為右上角的x按鈕-->
+            <!--<button
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
+            -->
           </div>
           <div class="modal-body">
             <!-- 中獎資訊獎動態填入此處 -->
           </div>
-          <div class="modal-footer">
+          <div class="d-flex justify-content-evenly p-3">
+            
+
+            <button
+              type="button "
+              id="cancelWinnerModalButton"
+              class="btn btn-warning btn-lg flex-fill me-2"
+              data-bs-dismiss="modal"
+              style="font-size: 2em; height: 60px;"
+              disabled  
+            >
+              放棄中獎資格(暫不開放)
+            </button>
+
             <button
               type="button"
               id="closeWinnerModalButton"
-              class="btn btn-secondary"
+              class="btn btn-primary btn-lg flex-fill me-2"
               data-bs-dismiss="modal"
+              style="font-size: 2em; height: 60px;"
             >
-              關閉
+              確認中獎資格
             </button>
           </div>
         </div>
