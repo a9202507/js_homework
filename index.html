@@ -14,24 +14,31 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
     <style>
-      html,
       body {
-        height: 100%;
-        margin: 0;
+        min-height: 100vh; /* Viewport height ensures the minimum height of the content including footer */
+        display: flex;
+        flex-direction: column; /* Stack content and footer vertically */
       }
       #content {
-        min-height: 100%;
+        /*min-height: 100%;*/
         margin-bottom: -4rem;
+        flex: 1;
       }
       #content:after {
         content: "";
         display: block;
         height: 4rem;
       }
+
       footer {
-        height: 4rem;
-        background: #f5f5f5;
-        line-height: 4rem;
+        /*background: #9bc3b7;
+        /*position: fixed;
+        left: 0;
+        bottom: 0;*/
+        width: 75%;
+        color: black;
+        margin: 0 auto;
+        text-align: center;
       }
       .right-group {
         float: right;
@@ -80,17 +87,26 @@
       .button-right-group button {
         margin-left: 10px;
       }
+
+      .tooltip-inner {
+        font-size: 1.1rem; /* 设置您想要的字体大小 */
+      }
     </style>
   </head>
   <body class="bg-light">
-    <div class="container py-5">
+    <div id="content" class="container py-5">
       <a href="/">
         <img
           src="https://www.infineon.com/frontend/release_2023-01/dist/resources/img/logo-desktop-en.png"
           alt="Infineon logo"
         />
       </a>
-      <form class="text-center mb-4" role="form" aria-label="抽獎表單">
+      <form
+        class="text-center mb-4"
+        role="form"
+        aria-label="抽獎表單"
+        style="background-color: #9bc3b7; width: 100%"
+      >
         <label for="main_title" class="visually-hidden">活動標題</label>
         <input
           id="main_title"
@@ -100,6 +116,12 @@
           placeholder="請輸入活動標題"
           aria-label="請輸入活動標題"
           value="Rev0.4.4 可輸入抽獎秒數最範圍"
+          style="
+            color: white;
+            background-color: #9bc3b7;
+            border: none;
+            outline: none;
+          "
         />
       </form>
 
@@ -108,6 +130,7 @@
         <label for="namesFile" class="form-label"
           >請上傳人員名單 (name.csv):</label
         >
+        <a href="./demofile/demo_name_10.csv">example file</a>
         <input type="file" class="form-control" id="namesFile" accept=".csv" />
       </div>
 
@@ -115,6 +138,7 @@
         <label for="giftsFile" class="form-label"
           >請上傳獎品清單 (gift.csv):</label
         >
+        <a href="./demofile/demo_gift.csv">example file</a>
         <input type="file" class="form-control" id="giftsFile" accept=".csv" />
       </div>
 
@@ -125,7 +149,7 @@
             <!--<span class="input-group-text" id="drawSecondsLabel">Running Sec</span>
             <input id="drawSecondvalue" type="text" class="form-control" value="7" aria-label="Draw seconds" aria-describedby="drawSecondsLabel"> -->
             <span class="input-group-text" id="drawSecondsLabel"
-              >Time range(Sec)</span
+              >摸彩亂數範圍(秒)</span
             >
             <input
               id="drawSecondvalueMin"
@@ -133,6 +157,9 @@
               aria-label="Minimum seconds"
               class="form-control"
               value="2"
+              data-bs-toggle="tooltip"
+              data-bs-placement="bottom"
+              title="輸入摸彩時間最小值"
             />
             <input
               id="drawSecondvalueMax"
@@ -140,6 +167,9 @@
               aria-label="Maximum seconds"
               class="form-control"
               value="8"
+              data-bs-toggle="tooltip"
+              data-bs-placement="top"
+              title="輸入摸彩時間最大值"
             />
           </div>
         </div>
@@ -420,7 +450,7 @@
       </div>
     </div>
     <!-- 頁脚 -->
-    <footer class="text-center mt-auto py-4 bg-light">
+    <footer class="text-center mt-auto py-4">
       <a>&copy; 2023 lucky draw, </a>
       <a href="https://github.com/a9202507/luckydraw_homework">Source code</a>
     </footer>
@@ -428,5 +458,14 @@
     <!-- 引入 Bootstrap 的 JavaScript 和 raffle.js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="raffle.js"></script>
+    <script>
+      // 激活所有的tooltip
+      var tooltipTriggerList = [].slice.call(
+        document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      );
+      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+    </script>
   </body>
 </html>
