@@ -233,7 +233,9 @@ function handleStoppedHighlighting(currentIndex) {
   ).children; //進版可以考慮拿掉
   eligibleParticipantsElements[currentIndex].style.backgroundColor = "orange"; //將中獎者高亮色彩從前一個函式設定的值 改成此行的顏色，確認已經中獎
   var winner = eligibleParticipants[currentIndex]; //設定winner 設為當次中獎人
-  const winnerModalBody = document.querySelector("#winnerModal .modal-body"); //綁定彈出視窗的內容
+  const winnerModalBody = document.querySelector(
+    "#winnerModal .modal-winner-body"
+  ); //綁定彈出視窗的內容 並套用.modal-winner-body 的CSS選擇器
   //winnerModalBody.textContent = `恭喜 \n${winner.departmentName} 部門,${winner.name}獲得 ${currentGift.name}！`; //設定彈出視窗的訊息，並連動中動人資訊
   winnerModalBody.innerHTML = `恭喜 <span style="color: red;">${winner.departmentName}</span> 部門<br><strong><span style="color: blue;">${winner.name}</span></strong> 獲得 ${currentGift.name}！`;
 
@@ -521,3 +523,61 @@ Date.prototype.toISOString = function () {
     time_zone
   );
 };
+
+// 限制輸入時間欄位的格式
+// 獲取A和B的輸入框和X按鈕元素
+const inputA = document.getElementById("drawSecondvalueMin");
+const inputB = document.getElementById("drawSecondvalueMax");
+const buttonX = document.getElementById("startRaffle-button");
+
+// 添加事件監聽器
+inputA.addEventListener("input", checkInputs);
+inputB.addEventListener("input", checkInputs);
+
+// 檢查輸入框的值並更新按鈕狀態
+function checkInputs() {
+  const valueA = Number(drawSecondvalueMin.value);
+  const valueB = Number(drawSecondvalueMax.value);
+
+  // 檢查A和B的值是否為數字，如果不是，則禁用按鈕
+  if (isNaN(valueA) || isNaN(valueB)) {
+    buttonX.disabled = true;
+    return;
+  }
+
+  // 檢查A是否小於B，如果是，則啟用按鈕，否則禁用按鈕
+  if (valueA < valueB) {
+    buttonX.disabled = false;
+  } else {
+    buttonX.disabled = true;
+  }
+}
+
+// 非數字無法輸入在畫面上
+// 獲取輸入框元素
+const drawSecondvalueMax_value = document.getElementById("drawSecondvalueMax");
+const drawSecondvalueMin_value = document.getElementById("drawSecondvalueMin");
+
+// 添加事件監聽器
+drawSecondvalueMax_value.addEventListener("keydown", function (event) {
+  // 如果輸入的按鍵不是數字，則阻止輸入
+  if (
+    event.key !== "Backspace" &&
+    event.key !== "Delete" &&
+    isNaN(Number(event.key))
+  ) {
+    event.preventDefault();
+  }
+});
+
+// 添加事件監聽器
+drawSecondvalueMin_value.addEventListener("keydown", function (event) {
+  // 如果輸入的按鍵不是數字，則阻止輸入
+  if (
+    event.key !== "Backspace" &&
+    event.key !== "Delete" &&
+    isNaN(Number(event.key))
+  ) {
+    event.preventDefault();
+  }
+});
