@@ -2,7 +2,7 @@
 <html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
-    <title>Lucky Draw Rev0.4.3</title>
+    <title>Lucky Draw Rev0.4.4</title>
     <!-- 引入 Bootstrap 的 CSS -->
     <link
       rel="stylesheet"
@@ -99,7 +99,7 @@
           name="欄位名稱"
           placeholder="請輸入活動標題"
           aria-label="請輸入活動標題"
-          value="Rev0.4.3 可輸入抽獎秒數最小值~最大值"
+          value="Rev0.4.4 可輸入抽獎秒數最範圍"
         />
       </form>
 
@@ -124,7 +124,7 @@
           <div class="input-group me-1">
           <!--<span class="input-group-text" id="drawSecondsLabel">Running Sec</span>
             <input id="drawSecondvalue" type="text" class="form-control" value="7" aria-label="Draw seconds" aria-describedby="drawSecondsLabel"> -->
-          <span class="input-group-text" id="drawSecondsLabel">Running min/max Sec</span>
+          <span class="input-group-text" id="drawSecondsLabel">Time range(Sec)</span>
             <input id="drawSecondvalueMin"type="text" aria-label="Minimum seconds" class="form-control" value="2">
             <input id="drawSecondvalueMax"type="text" aria-label="Maximum seconds" class="form-control" value="8">
           
@@ -291,14 +291,14 @@
               class="btn btn-warning btn-lg flex-fill me-2"
               data-bs-dismiss="modal"
               style="font-size: 2em; height: 60px;"
-              disabled  
+               
             >
-              放棄中獎資格(暫不開放)
+              放棄中獎資格
             </button>
 
             <button
               type="button"
-              id="closeWinnerModalButton"
+              id="confirmWinnerModalButton"
               class="btn btn-primary btn-lg flex-fill me-2"
               data-bs-dismiss="modal"
               style="font-size: 2em; height: 60px;"

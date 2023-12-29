@@ -4,6 +4,8 @@ let participants = []; //建立一個array，類似於python list 物件 存於�
 let gifts = []; //建立array , 存放未抽出之獎品
 let winners = []; //建立 array ，存放中獎人員的名單
 var total_winner = 0;
+var winner = [];
+let currentGift = [];
 
 //函式 readFile 傳入 人員檔案或禮物檔案，由isGift決定要存入到那一個array，供後續使用。
 function readFile(input, isGift) {
@@ -170,7 +172,7 @@ function performRaffle(index) {
   sortEligibleParticipantsListByRandom();
 
   const eligibleParticipants = participants.filter((p) => !p.hasWon); //篩選函式filter, 把participants裡面 haswon不為真的人名拉出來。 // !p.hasWon的! 是 log gate NOT 的操作
-  const currentGift = gifts.find((g) => g.quantity > 0); //找到第一個禮物數量大於零的禮物，拿出來抽獎。
+  currentGift = gifts.find((g) => g.quantity > 0); //找到第一個禮物數量大於零的禮物，拿出來抽獎。
   var eligibleParticipantsElements = document.getElementById(
     "eligibleParticipantsList"
   ).children; //將html中可參加抽獎的人員列表，全部綁定到 eligibleParticipantsElements
@@ -219,7 +221,7 @@ function performRaffle(index) {
     document.getElementById("result").innerHTML = "所有獎品都抽完了！";
     return;
   }
-  total_winner++; //抽獎完後，將中獎人數+1
+
   return index;
 }
 
@@ -227,12 +229,12 @@ function handleStoppedHighlighting(currentIndex) {
   //處理中獎當下的操作邏輯
 
   const eligibleParticipants = participants.filter((p) => !p.hasWon); //進版可以考慮拿掉
-  const currentGift = gifts.find((g) => g.quantity > 0); //進版可以考慮拿掉
+  currentGift = gifts.find((g) => g.quantity > 0); //進版可以考慮拿掉
   var eligibleParticipantsElements = document.getElementById(
     "eligibleParticipantsList"
   ).children; //進版可以考慮拿掉
   eligibleParticipantsElements[currentIndex].style.backgroundColor = "orange"; //將中獎者高亮色彩從前一個函式設定的值 改成此行的顏色，確認已經中獎
-  var winner = eligibleParticipants[currentIndex]; //設定winner 設為當次中獎人
+  winner = eligibleParticipants[currentIndex]; //設定winner 設為當次中獎人
   const winnerModalBody = document.querySelector("#winnerModal .modal-body"); //綁定彈出視窗的內容
   //winnerModalBody.textContent = `恭喜 \n${winner.departmentName} 部門,${winner.name}獲得 ${currentGift.name}！`; //設定彈出視窗的訊息，並連動中動人資訊
   winnerModalBody.innerHTML = `恭喜 <span style="color: red;">${winner.departmentName}</span> 部門<br><strong><span style="color: blue;">${winner.name}</span></strong> 獲得 ${currentGift.name}！`;
@@ -242,6 +244,7 @@ function handleStoppedHighlighting(currentIndex) {
   ); //綁定彈出視窗
   winnerModal.show(); //顯示彈出視窗
 
+  /*
   winner.hasWon = true; //將該中獎人設為已中獎
   currentGift.quantity -= 1; //減少當前獎項的數量
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); //設定得獎時間標記
@@ -252,9 +255,10 @@ function handleStoppedHighlighting(currentIndex) {
     department: winner.departmentName,
     prize: currentGift.name,
     timestamp: timestamp,
+    
   });
-
-  updateParticipantWinStatus(participants, winner.email, currentGift.name);
+  */
+  //updateParticipantWinStatus(participants, winner.email, currentGift.name);
 
   //document.getElementById("confirmRaffle-button").disabled = false; //抽獎完成後，啟動confirm 按鈕，用做UI流程控制。
 }
@@ -322,13 +326,33 @@ function downloadWinnersCSV() {
 // 等待DOM載入完畢
 document.addEventListener("DOMContentLoaded", (event) => {
   // 通過ID選擇按鈕並綁定click事件
-  const closeModalButton = document.getElementById("closeWinnerModalButton");
-  closeModalButton.addEventListener("click", confirmRaffle);
+  const confrimModalButton = document.getElementById(
+    "confirmWinnerModalButton"
+  );
+  confrimModalButton.addEventListener("click", confirmRaffle);
+});
+
+document.addEventListener("DOMContentLoaded", (event) => {
+  // 通過ID選擇按鈕並綁定click事件
+  const cancelModalButton = document.getElementById("cancelWinnerModalButton");
+  cancelModalButton.addEventListener("click", cancelRaffle);
 });
 
 function confirmRaffle() {
+  currentGift.quantity -= 1; //減少當前獎項的數量
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); //設定得獎時間標記
+  winners.push({
+    //將winner的資料，加入到winners之中
+    name: winner.name,
+    email: winner.email,
+    department: winner.departmentName,
+    prize: currentGift.name,
+    timestamp: timestamp,
+  });
+  total_winner++; //抽獎完後，將中獎人數+1
+  updateParticipantWinStatus(participants, winner.email, currentGift.name);
   //設定按下確認接鈕後的動作，做為UI流程控制
-  document.getElementById("startRaffle-button").disabled = false; //啟用抽獎跟洗牌按鈕，取消確認按鈕
+  document.getElementById("startRaffle-button").disabled = false; //啟用抽獎跟洗牌按鈕
   //document.getElementById("confirmRaffle-button").disabled = true;
   document.getElementById("randomSorting-button").disabled = false;
   window.scroll(0, 0);
@@ -340,7 +364,13 @@ function confirmRaffle() {
   document.getElementById("totalWinner").textContent = total_winner; //更新中獎總人數
 }
 
-function cancelRaffle() {}
+function cancelRaffle() {
+  document.getElementById("startRaffle-button").disabled = false; //啟用抽獎跟洗牌按鈕
+  document.getElementById("randomSorting-button").disabled = false;
+  window.scroll(0, 0);
+  updateParticipantWinStatus(participants, winner.email, "give up"); //中獎人放棄
+  sortEligibleParticipantsListByRandom();
+}
 
 function downloadNotWinnersCSV() {
   //操作邏輯同前
