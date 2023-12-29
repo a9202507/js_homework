@@ -233,9 +233,7 @@ function handleStoppedHighlighting(currentIndex) {
   ).children; //進版可以考慮拿掉
   eligibleParticipantsElements[currentIndex].style.backgroundColor = "orange"; //將中獎者高亮色彩從前一個函式設定的值 改成此行的顏色，確認已經中獎
   var winner = eligibleParticipants[currentIndex]; //設定winner 設為當次中獎人
-  const winnerModalBody = document.querySelector(
-    "#winnerModal .modal-winner-body"
-  ); //綁定彈出視窗的內容 並套用.modal-winner-body 的CSS選擇器
+  const winnerModalBody = document.querySelector("#winnerModal .modal-body"); //綁定彈出視窗的內容
   //winnerModalBody.textContent = `恭喜 \n${winner.departmentName} 部門,${winner.name}獲得 ${currentGift.name}！`; //設定彈出視窗的訊息，並連動中動人資訊
   winnerModalBody.innerHTML = `恭喜 <span style="color: red;">${winner.departmentName}</span> 部門<br><strong><span style="color: blue;">${winner.name}</span></strong> 獲得 ${currentGift.name}！`;
 
