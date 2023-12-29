@@ -579,24 +579,3 @@ drawSecondvalueMin_value.addEventListener("keydown", function (event) {
     event.preventDefault();
   }
 });
-
-document
-  .getElementById("loadDemoCsvLink")
-  .addEventListener("click", function (event) {
-    // 防止 <a> 元素的默認行為，例如跳轉到 href 屬性指定的頁面
-    event.preventDefault();
-
-    // 調用您的 demo function
-    loadDemoCSV();
-  });
-
-function loadDemoCSV() {
-  // 使用Fetch API從服務器獲取CSV文件
-  fetch("././demofile/demo_name_10.csv.csv")
-    .then((response) => response.text())
-    .then((csvText) => {
-      // 假設isGift是已知的，這裡直接傳遞
-      readFile(csvText, false);
-    })
-    .catch((error) => console.error("Error fetching the CSV:", error));
-}
