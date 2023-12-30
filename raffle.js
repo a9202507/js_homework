@@ -211,6 +211,7 @@ function performRaffle(index) {
     handleStoppedHighlighting(index); // 輸出當前的人員index，並由下一個函式接手
   }, during_time);
 
+  /*
   if (eligibleParticipants.length === 0) {
     // 若沒有未中獎人員，或沒有獎品了，則無法再抽獎
     document.getElementById("result").innerHTML = "沒有更多人可以參加抽獎了！";
@@ -221,6 +222,7 @@ function performRaffle(index) {
     document.getElementById("result").innerHTML = "所有獎品都抽完了！";
     return;
   }
+  */
 
   return index;
 }
@@ -360,7 +362,7 @@ function confirmRaffle() {
   updateEligibleParticipantsList(); //刷新可抽獎人員/可抽禮物/中獎人員名單
   updateAvailablePrizesList();
   updateWinnersList();
-
+  checkAndToggleRaffleButton();
   document.getElementById("totalWinner").textContent = total_winner; //更新中獎總人數
 }
 
@@ -581,31 +583,16 @@ function checkInputs() {
   }
 }
 
-// 非數字無法輸入在畫面上
-// 獲取輸入框元素
-const drawSecondvalueMax_value = document.getElementById("drawSecondvalueMax");
-const drawSecondvalueMin_value = document.getElementById("drawSecondvalueMin");
+function checkAndToggleRaffleButton() {
+  // 检查是否有可抽奖的人员和礼物
+  const canRaffle =
+    participants.length > 0 && gifts.some((gift) => gift.quantity > 0);
 
-// 添加事件監聽器
-drawSecondvalueMax_value.addEventListener("keydown", function (event) {
-  // 如果輸入的按鍵不是數字，則阻止輸入
-  if (
-    event.key !== "Backspace" &&
-    event.key !== "Delete" &&
-    isNaN(Number(event.key))
-  ) {
-    event.preventDefault();
-  }
-});
+  // 获取开始抽奖按钮元素
+  const startRaffleButton = document.getElementById("startRaffle-button");
 
-// 添加事件監聽器
-drawSecondvalueMin_value.addEventListener("keydown", function (event) {
-  // 如果輸入的按鍵不是數字，則阻止輸入
-  if (
-    event.key !== "Backspace" &&
-    event.key !== "Delete" &&
-    isNaN(Number(event.key))
-  ) {
-    event.preventDefault();
+  // 根据条件启用或禁用开始抽奖按钮
+  if (canRaffle === false) {
+    startRaffleButton.disabled = true;
   }
-});
+}
