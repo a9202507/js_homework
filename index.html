@@ -81,7 +81,7 @@
       }
 
       .custom-width {
-        width: 270px; /* 或者任何您需要的寬度 */
+        width: 390px; /* 或者任何您需要的寬度 */
       }
 
       .button-right-group button {
@@ -149,28 +149,33 @@
             <!--<span class="input-group-text" id="drawSecondsLabel">Running Sec</span>
             <input id="drawSecondvalue" type="text" class="form-control" value="7" aria-label="Draw seconds" aria-describedby="drawSecondsLabel"> -->
             <span class="input-group-text" id="drawSecondsLabel"
-              >摸彩亂數範圍(秒)</span
+              >摸彩亂數區間設定</span
             >
             <input
               id="drawSecondvalueMin"
-              type="text"
+              type="number"
               aria-label="Minimum seconds"
               class="form-control"
               value="2"
+              max="999"
               data-bs-toggle="tooltip"
               data-bs-placement="bottom"
               title="輸入摸彩時間最小值"
             />
+            <span class="input-group-text">秒</span>
+            <span class="input-group-text">~</span>
             <input
               id="drawSecondvalueMax"
-              type="text"
+              type="number"
               aria-label="Maximum seconds"
               class="form-control"
               value="8"
+              max="999"
               data-bs-toggle="tooltip"
               data-bs-placement="top"
               title="輸入摸彩時間最大值"
             />
+            <span class="input-group-text">秒</span>
           </div>
         </div>
         <button id="randomSorting-button" class="btn btn-lg btn-warning">
