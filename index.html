@@ -31,7 +31,7 @@
       }
 
       footer {
-        /*background: #0A8276; 淡色為9bc3b7
+        /*background: #9bc3b7; 淡色為9bc3b7
         /*position: fixed;
         left: 0;
         bottom: 0;*/
@@ -65,13 +65,13 @@
       }
 
       .modal-body {
-        font-size: 72px; /* 例如放大正文字体 */
-        color: #000000; /* 设置文字颜色为黑色 */
+        font-size: 72px; /* 例如放大正文字體 */
+        color: #000000; /* 設置文字顏色為黑色 */
       }
 
       .modal-alert-body {
-        font-size: 24px; /* 例如放大正文字体 */
-        color: #000000; /* 设置文字颜色为黑色 */
+        font-size: 24px; /* 例如放大正文字體 */
+        color: #000000; /* 設置文字顏色為黑色 */
       }
 
       @media (max-width: 768px) {
@@ -89,23 +89,38 @@
       }
 
       .tooltip-inner {
-        font-size: 1.1rem; /* 设置您想要的字体大小 */
+        font-size: 1.1rem; /* 設置您想要的字體大小 */
+      }
+
+      .img-container {
+        position: relative;
+        background-color: #9bc3b7;
+        width: 100%; /* 或者根据需要设置特定宽度 */
+        /*height: 3px; /* 设置容器高度 */
+      }
+      .overlay-logo {
+        position: absolute;
+        top: 10px; /* 根据需要调整 */
+        left: 15px; /* 根据需要调整 */
       }
     </style>
   </head>
   <body class="bg-light">
     <div id="content" class="container py-5">
-      <a href="/">
-        <img
-          src="https://www.infineon.com/frontend/release_2023-01/dist/resources/img/logo-desktop-en.png"
-          alt="Infineon logo"
-        />
-      </a>
+      <div class="img-container">
+        <a href="/">
+          <img
+            src="https://www.infineon.com/frontend/release_2023-01/dist/resources/img/logo-desktop-en.png"
+            alt="Infineon logo"
+            class="overlay-logo"
+          />
+        </a>
+      </div>
       <form
         class="text-center mb-4"
         role="form"
         aria-label="抽獎表單"
-        style="background-color: #0a8276; width: 100%"
+        style="background-color: #9bc3b7; width: 100%"
       >
         <label for="main_title" class="visually-hidden">活動標題</label>
         <input
@@ -118,7 +133,7 @@
           value="Rev0.4.5.1 這邊是活動標題"
           style="
             color: white;
-            background-color: #0a8276;
+            background-color: #9bc3b7;
             border: none;
             outline: none;
           "
@@ -313,7 +328,7 @@
         data-bs-backdrop="static"
         data-bs-keyboard="false"
       >
-        <!--data-backdrop="static" 这里禁止点击外部关闭Modal  data-keyboard="false" 这里禁止键盘事件（比如ESC键）关闭Modal -->
+        <!--data-backdrop="static" 這裡禁止點擊外部關閉Modal  data-keyboard="false" 這裡禁止鍵盤事件（比如ESC鍵）關閉Modal -->
         <div class="modal-dialog modal-dialog-centered" style="max-width: 80%">
           <div class="modal-content">
             <div class="modal-header">
@@ -361,8 +376,8 @@
           <div class="col-md-3">
             <div class="d-flex align-items-center mb-2">
               <!-- 使用Bootstrap的Flexbox實現標題和搜索按鈕在同一行 -->
-              <h2 class="mb-0">可参加抽獎人員</h2>
-              <!-- "可參加抽獎人員" 標題旁邊的放大镜圖標按鈕 -->
+              <h2 class="mb-0">可參加抽獎人員</h2>
+              <!-- "可參加抽獎人員" 標題旁邊的放大鏡圖標按鈕 -->
               <button
                 type="button"
                 class="btn btn-primary btn-sm"
@@ -405,7 +420,7 @@
             </div>
             <div>中獎總人數: <span id="totalWinner">0</span></div>
             <table id="winnersList" class="table">
-              <thead style="background-color: #0a8276; color: white">
+              <thead style="background-color: #9bc3b7; color: white">
                 <tr>
                   <th>姓名</th>
                   <th>工號</th>
@@ -456,7 +471,7 @@
         </div>
       </div>
     </div>
-    <!-- 頁脚 -->
+    <!-- 頁腳 -->
     <footer class="text-center mt-auto py-4">
       <a>&copy; 2023 lucky draw, </a>
       <a href="https://github.com/a9202507/luckydraw_homework">Source code</a>
@@ -466,7 +481,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="raffle.js"></script>
     <script>
-      // 激活所有的tooltip
+      // 啟動所有的tooltip
       var tooltipTriggerList = [].slice.call(
         document.querySelectorAll('[data-bs-toggle="tooltip"]')
       );
