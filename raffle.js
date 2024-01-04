@@ -56,21 +56,11 @@ function csvToArray(csvString, isGift) {
     } catch (error) {
       // Log the error with the line number. Note that index starts from 0, so add 1 to represent the actual line number.
       //console.error(`Error in line ${index + 2}: ${row}. Error message: ${error.message}`);
-
-      const errorModalElement = document.getElementById("errorModal"); //綁定index.html下的errorModal元件
-      const errorModalMessageElement =
-        document.getElementById("errorModalMessage"); //綁定index.html下的errorModalMessage元件
-
-      //設置彈出視窗的錯誤訊息
-
-      errorModalMessageElement.textContent = `csv檔異常，請確認人員.csv第一行欄位數量至少五欄。也請檢查第 ${
+      theErrorMessage = `csv檔異常，請確認人員.csv 姓名欄位第 ${
         index + 2
       }行的資料，是否有空白欄位存在.`;
 
-      const errorModal = new bootstrap.Modal(errorModalElement); //顯示錯誤彈出視窗
-      errorModal.show();
-      // Return null or an error object for that row
-      return { error: `Line ${index + 2}: ${error.message}` };
+      raffleCloseMessage(".CSV檔案異常", theErrorMessage);
     }
   });
 
@@ -151,26 +141,17 @@ function updateWinnersList() {
 function startRaffle() {
   //準備開始抽獎
   //檢查是否上傳人員.csv  獎品.csv
-  if (participants.length === 0 || gifts.length === 0) {
-    //若有一個名單沒上傳，則準備錯誤訊息
-    const errorModalElement = document.getElementById("errorModal"); //綁定index.html下的errorModal元件
-    const errorModalMessageElement =
-      document.getElementById("errorModalMessage"); //綁定index.html下的errorModalMessage元件
 
-    //設置彈出視窗的錯誤訊息
-    if (participants.length === 0 && gifts.length === 0) {
-      errorModalMessageElement.textContent = "需先上傳人員名單和獎品清單。";
-    } else if (participants.length === 0) {
-      errorModalMessageElement.textContent = "需先上傳人員名單。";
-    } else if (gifts.length === 0) {
-      errorModalMessageElement.textContent = "需先上傳獎品清單。";
-    }
-
-    const errorModal = new bootstrap.Modal(errorModalElement); //顯示錯誤彈出視窗
-    errorModal.show();
+  //設置彈出視窗的錯誤訊息
+  if (participants.length === 0 && gifts.length === 0) {
+    raffleCloseMessage("錯誤", "無法執行抽獎，需先上傳人員名單和獎品清單。");
+  } else if (participants.length === 0) {
+    raffleCloseMessage("錯誤", "無法執行抽獎，需先上傳人員名單。");
+  } else if (gifts.length === 0) {
+    raffleCloseMessage("錯誤", "無法執行抽獎，需先上傳獎品清單。");
   } else {
-    performRaffle((index = 0)); //若人員.csv and 獎品.csv都上傳，則執行performraffle函式
-  }
+    performRaffle((index = 0));
+  } //若人員.csv and 獎品.csv都上傳，則執行performraffle函式
 }
 
 function performRaffle(index) {
@@ -253,24 +234,6 @@ function handleStoppedHighlighting(currentIndex) {
     document.getElementById("winnerModal")
   ); //綁定彈出視窗
   winnerModal.show(); //顯示彈出視窗
-
-  /*
-  winner.hasWon = true; //將該中獎人設為已中獎
-  currentGift.quantity -= 1; //減少當前獎項的數量
-  const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); //設定得獎時間標記
-  winners.push({
-    //將winner的資料，加入到winners之中
-    name: winner.name,
-    email: winner.email,
-    department: winner.departmentName,
-    prize: currentGift.name,
-    timestamp: timestamp,
-    
-  });
-  */
-  //updateParticipantWinStatus(participants, winner.email, currentGift.name);
-
-  //document.getElementById("confirmRaffle-button").disabled = false; //抽獎完成後，啟動confirm 按鈕，用做UI流程控制。
 }
 
 function updateParticipantWinStatus(participants, findTheEmailText, prizeName) {
@@ -318,20 +281,6 @@ function downloadResultCSV() {
   });
   downloadCSV(filename, csvContent);
 }
-
-/*function downloadWinnersCSV() {
-  const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); //輸出 2023-12-23T19-30-25-000Z 格式的時間戳記
-  const main_title = document.getElementById("main_title").value; //取回網頁上活動標題的內文
-  const filename = `${main_title}_Winners_${timestamp}.csv`; //設定存檔檔名為 活動標題加上時間戳記
-
-  let bom = "\uFEFF"; // UTF-8 的 BOM
-  let csvContent = "data:text/csv;charset=utf-8," + bom; // UTF-8 的 BOM
-  csvContent += "Name,ID,department,Prize,Timestamp\r\n"; // 在CSV的第一行，設置Name,Prize,Timestamp
-  winners.forEach(function (winner) {
-    csvContent += `${winner.name},${winner.email},${winner.department},${winner.prize},${winner.timestamp}\r\n`; //將winners 內容迖代進csvContent之前
-  });
-  downloadCSV(filename, csvContent);
-}*/
 
 // 等待DOM載入完畢
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -381,24 +330,6 @@ function cancelRaffle() {
   updateParticipantWinStatus(participants, winner.email, "give up"); //中獎人放棄
   sortEligibleParticipantsListByRandom();
 }
-
-/*function downloadNotWinnersCSV() {
-  //操作邏輯同前
-  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const main_title = document.getElementById("main_title").value;
-  const filename = `${main_title}_notWinner_${timestamp}.csv`;
-
-  let bom = "\uFEFF";
-  let csvContent = "data:text/csv;charset=utf-8," + bom;
-  csvContent += "Name,id,department,prize,timestamp\r\n"; // CSV頭部
-
-  //const notWinners = participants.filter((p) => !p.hasWon);
-  participants.forEach(function (participant) {
-    csvContent += `${participant.name},${participant.email},${participant.departmentName},${participant.hasWon},${participant.timeStamp},\r\n`;
-  });
-
-  downloadCSV(filename, csvContent);
-} */
 
 function downloadCSV(filename, csvContent) {
   const encodedUri = encodeURI(csvContent);
