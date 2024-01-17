@@ -2,7 +2,7 @@
 <html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
-    <title>Lucky Draw Rev0.4.5</title>
+    <title>Lucky Draw Rev0.4.4</title>
     <!-- 引入 Bootstrap 的 CSS -->
     <link
       rel="stylesheet"
@@ -14,31 +14,24 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
     <style>
+      html,
       body {
-        min-height: 100vh; /* Viewport height ensures the minimum height of the content including footer */
-        display: flex;
-        flex-direction: column; /* Stack content and footer vertically */
+        height: 100%;
+        margin: 0;
       }
       #content {
-        /*min-height: 100%;*/
+        min-height: 100%;
         margin-bottom: -4rem;
-        flex: 1;
       }
       #content:after {
         content: "";
         display: block;
         height: 4rem;
       }
-
       footer {
-        /*background: #0A8276; 淡色為9bc3b7
-        /*position: fixed;
-        left: 0;
-        bottom: 0;*/
-        width: 75%;
-        color: black;
-        margin: 0 auto;
-        text-align: center;
+        height: 4rem;
+        background: #f5f5f5;
+        line-height: 4rem;
       }
       .right-group {
         float: right;
@@ -65,48 +58,39 @@
       }
 
       .modal-body {
-        font-size: 72px; /* 例如放大正文字体 */
-        color: #000000; /* 设置文字颜色为黑色 */
+        font-size: 72px; /* 例如放大正文字體 */
+        color: #000000; /* 設置文字顏色為黑色 */
       }
 
       .modal-alert-body {
-        font-size: 24px; /* 例如放大正文字体 */
-        color: #000000; /* 设置文字颜色为黑色 */
+        font-size: 24px; /* 例如放大正文字體 */
+        color: #000000; /* 設置文字顏色為黑色 */
       }
 
       @media (max-width: 768px) {
         .responsive-input {
-          font-size: 24px; /* 小屏幕時降低字體大小 */
+          font-size: 24px; /* 小螢幕時降低字體大小 */
         }
       }
 
       .custom-width {
-        width: 390px; /* 或者任何您需要的寬度 */
+      width: 270px; /* 或者任何您需要的寬度 */
       }
 
       .button-right-group button {
-        margin-left: 10px;
-      }
-
-      .tooltip-inner {
-        font-size: 1.1rem; /* 设置您想要的字体大小 */
-      }
+      margin-left: 10px;
+     }
     </style>
   </head>
   <body class="bg-light">
-    <div id="content" class="container py-5">
+    <div class="container py-5">
       <a href="/">
         <img
           src="https://www.infineon.com/frontend/release_2023-01/dist/resources/img/logo-desktop-en.png"
           alt="Infineon logo"
         />
       </a>
-      <form
-        class="text-center mb-4"
-        role="form"
-        aria-label="抽獎表單"
-        style="background-color: #0a8276; width: 100%"
-      >
+      <form class="text-center mb-4" role="form" aria-label="抽獎表單">
         <label for="main_title" class="visually-hidden">活動標題</label>
         <input
           id="main_title"
@@ -115,13 +99,7 @@
           name="欄位名稱"
           placeholder="請輸入活動標題"
           aria-label="請輸入活動標題"
-          value="Rev0.4.5 這邊是活動標題"
-          style="
-            color: white;
-            background-color: #0a8276;
-            border: none;
-            outline: none;
-          "
+          value="Rev0.4.4 可輸入抽獎秒數最範圍"
         />
       </form>
 
@@ -130,7 +108,6 @@
         <label for="namesFile" class="form-label"
           >請上傳人員名單 (name.csv):</label
         >
-        <a href="./demofile/demo_name_10.csv">example file</a>
         <input type="file" class="form-control" id="namesFile" accept=".csv" />
       </div>
 
@@ -138,46 +115,21 @@
         <label for="giftsFile" class="form-label"
           >請上傳獎品清單 (gift.csv):</label
         >
-        <a href="./demofile/demo_gift.csv">example file</a>
         <input type="file" class="form-control" id="giftsFile" accept=".csv" />
       </div>
-
-      <div class="right-group d-flex align-items-center button-right-group">
-        <!-- New input group for entering draw seconds -->
-        <div class="col-auto custom-width">
+      
+        <div class="right-group d-flex align-items-center button-right-group">
+          <!-- New input group for entering draw seconds -->
+          <div class="col-auto custom-width">
           <div class="input-group me-1">
-            <!--<span class="input-group-text" id="drawSecondsLabel">Running Sec</span>
+          <!--<span class="input-group-text" id="drawSecondsLabel">Running Sec</span>
             <input id="drawSecondvalue" type="text" class="form-control" value="7" aria-label="Draw seconds" aria-describedby="drawSecondsLabel"> -->
-            <span class="input-group-text" id="drawSecondsLabel"
-              >摸彩亂數區間設定</span
-            >
-            <input
-              id="drawSecondvalueMin"
-              type="number"
-              aria-label="Minimum seconds"
-              class="form-control"
-              value="2"
-              max="999"
-              data-bs-toggle="tooltip"
-              data-bs-placement="bottom"
-              title="輸入摸彩時間最小值"
-            />
-            <span class="input-group-text">秒</span>
-            <span class="input-group-text">~</span>
-            <input
-              id="drawSecondvalueMax"
-              type="number"
-              aria-label="Maximum seconds"
-              class="form-control"
-              value="8"
-              max="999"
-              data-bs-toggle="tooltip"
-              data-bs-placement="top"
-              title="輸入摸彩時間最大值"
-            />
-            <span class="input-group-text">秒</span>
+          <span class="input-group-text" id="drawSecondsLabel">Time range(Sec)</span>
+            <input id="drawSecondvalueMin"type="text" aria-label="Minimum seconds" class="form-control" value="2">
+            <input id="drawSecondvalueMax"type="text" aria-label="Maximum seconds" class="form-control" value="8">
+          
           </div>
-        </div>
+          </div>
         <button id="randomSorting-button" class="btn btn-lg btn-warning">
           洗牌
         </button>
@@ -199,6 +151,7 @@
           -->
       </div>
 
+       
       <div id="result" class="mt-3"></div>
 
       <!--手風琴-->
@@ -272,153 +225,155 @@
         </div>
       </div>
 
-      <!-- 錯誤提示彈出視窗 -->
-      <div class="modal" tabindex="-1" id="errorModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">錯誤提示</h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-alert-body">
-              <p id="errorModalMessage">需要先上傳人員/獎品清單。</p>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-primary"
-                data-bs-dismiss="modal"
-              >
-                確定
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 中獎提示彈出視窗 -->
-      <div
-        class="modal fade"
-        id="winnerModal"
-        tabindex="-1"
-        aria-labelledby="winnerModalLabel"
-        aria-hidden="true"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-      >
-        <!--data-backdrop="static" 这里禁止点击外部关闭Modal  data-keyboard="false" 这里禁止键盘事件（比如ESC键）关闭Modal -->
-        <div class="modal-dialog modal-dialog-centered" style="max-width: 80%">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="winnerModalLabel">中獎通知</h5>
-
-              <!-- 以下為右上角的x按鈕-->
-              <!--<button
+    <!-- 錯誤提示彈出視窗 -->
+    <div class="modal" tabindex="-1" id="errorModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">錯誤提示</h5>
+            <button
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
-            --></div>
-            <div class="modal-body">
-              <!-- 中獎資訊獎動態填入此處 -->
-            </div>
-            <div class="d-flex justify-content-evenly p-3">
-              <button
-                type="button "
-                id="cancelWinnerModalButton"
-                class="btn btn-warning btn-lg flex-fill me-2"
-                data-bs-dismiss="modal"
-                style="font-size: 2em; height: 60px"
-              >
-                放棄中獎資格
-              </button>
-
-              <button
-                type="button"
-                id="confirmWinnerModalButton"
-                class="btn btn-primary btn-lg flex-fill me-2"
-                data-bs-dismiss="modal"
-                style="font-size: 2em; height: 60px"
-              >
-                確認中獎資格
-              </button>
-            </div>
+          </div>
+          <div class="modal-alert-body">
+            <p id="errorModalMessage">需要先上傳人員/獎品清單。</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+            >
+              確定
+            </button>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="container">
-        <div class="row">
-          <!-- 可參加抽獎的人員名單 -->
-          <div class="col-md-3">
-            <div class="d-flex align-items-center mb-2">
-              <!-- 使用Bootstrap的Flexbox實現標題和搜索按鈕在同一行 -->
-              <h2 class="mb-0">可参加抽獎人員</h2>
-              <!-- "可參加抽獎人員" 標題旁邊的放大镜圖標按鈕 -->
-              <button
-                type="button"
-                class="btn btn-primary btn-sm"
-                data-bs-toggle="modal"
-                data-bs-target="#searchModal"
-              >
-                <i class="fas fa-search"></i>
-                <!-- 使用Font Awesome圖標庫的搜索圖標 -->
-              </button>
-            </div>
+    <!-- 中獎提示彈出視窗 -->
+    <div
+      class="modal fade"
+      id="winnerModal"
+      tabindex="-1"
+      aria-labelledby="winnerModalLabel"
+      aria-hidden="true"
+      data-bs-backdrop="static" 
+      data-bs-keyboard="false" 
+    > <!--data-backdrop="static" 這裡禁止點擊外部關閉Modal  data-keyboard="false" 這裡禁止鍵盤事件（比如ESC鍵）關閉Modal -->
+      <div class="modal-dialog modal-dialog-centered" style="max-width: 80%;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="winnerModalLabel">中獎通知</h5>
 
-            <div>尚未中獎人數: <span id="totalParticipants">0</span></div>
-            <ul id="eligibleParticipantsList" class="list-group">
-              <!-- 通過JS動態填充 -->
-            </ul>
+
+            <!-- 以下為右上角的x按鈕-->
+            <!--<button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+            -->
           </div>
-
-          <!-- 未開出獎項 -->
-          <div class="col-md-3">
-            <h2>未開出獎項</h2>
-            <div>剩餘數量: <span id="totalPrizes">0</span></div>
-            <ul id="availablePrizesList" class="list-group">
-              <!-- 通過JS動態填充 -->
-            </ul>
+          <div class="modal-body">
+            <!-- 中獎資訊獎動態填入此處 -->
           </div>
+          <div class="d-flex justify-content-evenly p-3">
+            
 
-          <!-- 歷史中獎記錄 -->
-          <div class="col-md-6">
-            <div class="d-flex justify-content-between">
-              <h2>歷史中獎記錄</h2>
+            <button
+              type="button "
+              id="cancelWinnerModalButton"
+              class="btn btn-warning btn-lg flex-fill me-2"
+              data-bs-dismiss="modal"
+              style="font-size: 2em; height: 60px;"
+               
+            >
+              放棄中獎資格
+            </button>
 
-              <button
-                type="button"
-                id="downResultCSV"
-                onclick="downloadResultCSV()"
-                class="btn btn-lg btn-info"
-              >
-                Download report
-              </button>
-            </div>
-            <div>中獎總人數: <span id="totalWinner">0</span></div>
-            <table id="winnersList" class="table">
-              <thead style="background-color: #0a8276; color: white">
-                <tr>
-                  <th>姓名</th>
-                  <th>工號</th>
-                  <th>部門</th>
-                  <th>所獲獎品</th>
-                  <!-- <th>中獎時間</th> -->
-                </tr>
-              </thead>
-              <tbody>
-                <!-- 通過JS動態填充 -->
-              </tbody>
-            </table>
-            <!--下載結果名單-->
+            <button
+              type="button"
+              id="confirmWinnerModalButton"
+              class="btn btn-primary btn-lg flex-fill me-2"
+              data-bs-dismiss="modal"
+              style="font-size: 2em; height: 60px;"
+            >
+              確認中獎資格
+            </button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <!-- 可參加抽獎的人員名單 -->
+        <div class="col-md-3">
+          <div class="d-flex align-items-center mb-2">
+            <!-- 使用Bootstrap的Flexbox實現標題和搜索按鈕在同一行 -->
+            <h2 class="mb-0">可參加抽獎人員</h2>
+            <!-- "可參加抽獎人員" 標題旁邊的放大鏡圖示按鈕 -->
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#searchModal"
+            >
+              <i class="fas fa-search"></i>
+              <!-- 使用Font Awesome圖示庫的搜索圖示 -->
+            </button>
+          </div>
+
+          <div>尚未中獎人數: <span id="totalParticipants">0</span></div>
+          <ul id="eligibleParticipantsList" class="list-group">
+            <!-- 通過JS動態填充 -->
+          </ul>
+        </div>
+
+        <!-- 未開出獎項 -->
+        <div class="col-md-3">
+          <h2>未開出獎項</h2>
+          <div>剩餘數量: <span id="totalPrizes">0</span></div>
+          <ul id="availablePrizesList" class="list-group">
+            <!-- 通過JS動態填充 -->
+          </ul>
+        </div>
+
+        <!-- 歷史中獎記錄 -->
+        <div class="col-md-6">
+          <h2>歷史中獎記錄</h2>
+          <div>中獎總人數: <span id="totalWinner">0</span></div>
+          <table id="winnersList" class="table">
+            <thead class="table-dark">
+              <tr>
+                <th>姓名</th>
+                <th>工號</th>
+                <th>部門</th>
+                <th>所獲獎品</th>
+                <!-- <th>中獎時間</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 通過JS動態填充 -->
+            </tbody>
+          </table>
+           <!--下載結果名單-->
+      <div class="right-group">
+        <button
+          id="downResultCSV"
+          onclick="downloadResultCSV()"
+          class="btn btn-lg btn-info"
+        >
+          Download report
+        </button>
+      </div>
+        </div>
+        
       </div>
     </div>
 
@@ -454,8 +409,8 @@
         </div>
       </div>
     </div>
-    <!-- 頁脚 -->
-    <footer class="text-center mt-auto py-4">
+    <!-- 頁尾 -->
+    <footer class="text-center mt-auto py-4 bg-light">
       <a>&copy; 2023 lucky draw, </a>
       <a href="https://github.com/a9202507/luckydraw_homework">Source code</a>
     </footer>
@@ -463,14 +418,5 @@
     <!-- 引入 Bootstrap 的 JavaScript 和 raffle.js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="raffle.js"></script>
-    <script>
-      // 激活所有的tooltip
-      var tooltipTriggerList = [].slice.call(
-        document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      );
-      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-      });
-    </script>
   </body>
 </html>

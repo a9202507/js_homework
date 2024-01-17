@@ -95,7 +95,7 @@ function updateEligibleParticipantsList() {
   });
 
   document.getElementById("totalParticipants").textContent = total; //將參加人數投放到網頁
-  // 调用函数以查找和显示重复项
+  // 調用函數以查找和顯示重複項
   findDuplicates();
 }
 //更新可抽禮物清單到網頁
@@ -123,7 +123,7 @@ function updateWinnersList() {
     .getElementById("winnersList")
     .querySelector("tbody"); //將網頁元件winnersList下的tbody表格綁定到此
 
-  tableBody.innerHTML = ""; //重置此html網頁元件
+  tableBody.innerHTML = ""; //重設此html網頁元件
   winners.forEach((winner) => {
     //開始迖代
     const row = tableBody.insertRow(); //在html元件插入一行
@@ -187,7 +187,7 @@ function performRaffle(index) {
         i === index ? "yellow" : "";
     }
 
-    //讓視窗跟著光標跑
+    //讓視窗跟著游標跑
     eligibleParticipantsElements[index].scrollIntoView({
       behavior: "smooth",
       block: "center",
@@ -380,7 +380,7 @@ function downloadNotWinnersCSV() {
 
   let bom = "\uFEFF";
   let csvContent = "data:text/csv;charset=utf-8," + bom;
-  csvContent += "Name,id,department,prize,timestamp\r\n"; // CSV头部
+  csvContent += "Name,id,department,prize,timestamp\r\n"; // CSV頭部
 
   //const notWinners = participants.filter((p) => !p.hasWon);
   participants.forEach(function (participant) {
@@ -414,38 +414,38 @@ document
   .getElementById("randomSorting-button")
   .addEventListener("click", sortEligibleParticipantsListByRandom);
 
-// 函数用于查找重复的姓名和邮箱
+// 函數用於查找重複的姓名和信箱
 function findDuplicates() {
-  let nameMap = {}; // 用于记录名字
-  let emailMap = {}; // 用于记录邮箱
-  let duplicates = { names: [], emails: [] }; // 用于存储重复的名字和邮箱
+  let nameMap = {}; // 用於記錄名字
+  let emailMap = {}; // 用於記錄信箱
+  let duplicates = { names: [], emails: [] }; // 用於儲存重複的名字和信箱
 
   participants.forEach((participant) => {
-    // 检查名字是否重复
+    // 檢查名字是否重複
     if (nameMap[participant.name]) {
-      duplicates.names.push(participant); // 如果名字已存在，推入重复名单
+      duplicates.names.push(participant); // 如果名字已存在，推入重複名單
     } else {
-      nameMap[participant.name] = true; // 否则记录该名字
+      nameMap[participant.name] = true; // 否則記錄該名字
     }
 
-    // 检查邮箱是否重复
+    // 檢查信箱是否重複
     if (emailMap[participant.email]) {
-      duplicates.emails.push(participant); // 如果邮箱已存在，推入重复名单
+      duplicates.emails.push(participant); // 如果信箱已存在，推入重複名單
     } else {
-      emailMap[participant.email] = true; // 否则记录该邮箱
+      emailMap[participant.email] = true; // 否則記錄該信箱
     }
   });
 
-  // 显示重复的名字和邮箱
+  // 顯示重複的名字和信箱
   displayDuplicates(duplicates);
 
-  // 返回重复项数组以备进一步处理
+  // 返回重複項數組以備進一步處理
   return duplicates;
 }
 
-// 函数用于在页面上显示重复项
+// 函數用於在頁面上顯示重複項
 function displayDuplicates(duplicates) {
-  // 假设页面上有两个列表用于显示重复的名字和邮箱
+  // 假設頁面上有兩個列表用於顯示重複的名字和信箱
   const nameList = document.getElementById("duplicateNamesList");
   const emailList = document.getElementById("duplicateEmailsList");
 
@@ -453,66 +453,66 @@ function displayDuplicates(duplicates) {
   nameList.innerHTML = "";
   emailList.innerHTML = "";
 
-  // 显示重复的名字
+  // 顯示重複的名字
   duplicates.names.forEach((duplicate) => {
     const listItem = document.createElement("li");
-    listItem.className = "list-group-item"; // 添加 Bootstrap 列表项样式
+    listItem.className = "list-group-item"; // 添加 Bootstrap 列表項樣式
     listItem.textContent = `${duplicate.name}`;
     nameList.appendChild(listItem);
   });
 
-  // 获取显示重复姓名数量的徽章元素
+  // 獲取顯示重複姓名數量的徽章元素
   const duplicateNamesCount = document.getElementById("duplicateNamesCount");
 
   if (duplicates.names.length === 0) {
-    duplicateNamesCount.style.display = "inline-block"; // 使徽章可见
-    // 如果没有重复项，显示绿色打勾图标
+    duplicateNamesCount.style.display = "inline-block"; // 使徽章可見
+    // 如果沒有重複項，顯示綠色打勾圖示
     duplicateNamesCount.className = "badge bg-success rounded-pill";
-    // 使用 Bootstrap Icons 或其他图标库的图标类（如下面示例使用了 Font Awesome）
+    // 使用 Bootstrap Icons 或其他圖示庫的圖示類（如下面範例使用了 Font Awesome）
     duplicateNamesCount.innerHTML =
       '<i class="fa fa-check" aria-hidden="true"></i>';
   } else {
-    // 如果有重复项，显示红色徽章并显示数量
-    duplicateNamesCount.style.display = "inline-block"; // 使徽章可见
+    // 如果有重複項，顯示紅色徽章並顯示數量
+    duplicateNamesCount.style.display = "inline-block"; // 使徽章可見
     duplicateNamesCount.className = "badge bg-danger rounded-pill";
     duplicateNamesCount.textContent = duplicates.names.length;
   }
 
-  // 显示重复的邮箱
+  // 顯示重複的信箱
   duplicates.emails.forEach((duplicate) => {
     const listItem = document.createElement("li");
-    listItem.className = "list-group-item"; // 添加 Bootstrap 列表项样式
+    listItem.className = "list-group-item"; // 添加 Bootstrap 列表項樣式
     listItem.textContent = `${duplicate.email}`;
     emailList.appendChild(listItem);
   });
 
-  // 获取显示重复Email数量的徽章元素
+  // 獲取顯示重複Email數量的徽章元素
   const duplicateEmailCount = document.getElementById("duplicateEmailCount");
 
   if (duplicates.emails.length === 0) {
-    duplicateEmailCount.style.display = "inline-block"; // 使徽章可见
-    // 如果没有重复项，显示绿色打勾图标
+    duplicateEmailCount.style.display = "inline-block"; // 使徽章可見
+    // 如果沒有重複項，顯示綠色打勾圖示
     duplicateEmailCount.className = "badge bg-success rounded-pill";
-    // 使用 Bootstrap Icons 或其他图标库的图标类（如下面示例使用了 Font Awesome）
+    // 使用 Bootstrap Icons 或其他圖示庫的圖示類（如下面範例使用了 Font Awesome）
     duplicateEmailCount.innerHTML =
       '<i class="fa fa-check" aria-hidden="true"></i>';
   } else {
-    // 如果有重复项，显示红色徽章并显示数量
-    duplicateEmailCount.style.display = "inline-block"; // 使徽章可见
+    // 如果有重複項，顯示紅色徽章並顯示數量
+    duplicateEmailCount.style.display = "inline-block"; // 使徽章可見
     duplicateEmailCount.className = "badge bg-danger rounded-pill";
     duplicateEmailCount.textContent = duplicates.emails.length;
   }
 }
 
-// 搜索功能实现
+// 搜索功能實現
 function searchParticipant() {
   var input, filter, ul, li, i, txtValue;
   input = document.getElementById("searchInput");
   filter = input.value.toUpperCase();
   ul = document.getElementById("searchResults");
-  ul.innerHTML = ""; // 清空之前的搜索结果
+  ul.innerHTML = ""; // 清空之前的搜索結果
 
-  // 遍历参与者数据来寻找匹配项
+  // 遍歷參與者數據來尋找匹配項
   for (i = 0; i < participants.length; i++) {
     txtValue = participants[i].name;
     if (txtValue.toUpperCase().indexOf(filter) > -1) {
