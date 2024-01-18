@@ -96,6 +96,12 @@ function updateEligibleParticipantsList() {
 
   document.getElementById("totalParticipants").textContent = total; //將參加人數投放到網頁
   // 調用函數以查找和顯示重複項
+
+  if (total === 0) {
+    raffleCloseMessage("抽獎結束", "可抽獎人員不足");
+    document.getElementById("startRaffle-button").disabled = true; // 關閉抽獎跟洗牌按鈕
+  }
+
   findDuplicates();
 }
 //更新可抽禮物清單到網頁
@@ -211,6 +217,7 @@ function performRaffle(index) {
     handleStoppedHighlighting(index); // 輸出當前的人員index，並由下一個函式接手
   }, during_time);
 
+  /*
   if (eligibleParticipants.length === 0) {
     // 若沒有未中獎人員，或沒有獎品了，則無法再抽獎
     document.getElementById("result").innerHTML = "沒有更多人可以參加抽獎了！";
@@ -221,6 +228,7 @@ function performRaffle(index) {
     document.getElementById("result").innerHTML = "所有獎品都抽完了！";
     return;
   }
+  */
 
   return index;
 }
@@ -309,7 +317,7 @@ function downloadResultCSV() {
   downloadCSV(filename, csvContent);
 }
 
-function downloadWinnersCSV() {
+/*function downloadWinnersCSV() {
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); //輸出 2023-12-23T19-30-25-000Z 格式的時間戳記
   const main_title = document.getElementById("main_title").value; //取回網頁上活動標題的內文
   const filename = `${main_title}_Winners_${timestamp}.csv`; //設定存檔檔名為 活動標題加上時間戳記
@@ -321,7 +329,7 @@ function downloadWinnersCSV() {
     csvContent += `${winner.name},${winner.email},${winner.department},${winner.prize},${winner.timestamp}\r\n`; //將winners 內容迖代進csvContent之前
   });
   downloadCSV(filename, csvContent);
-}
+}*/
 
 // 等待DOM載入完畢
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -360,7 +368,7 @@ function confirmRaffle() {
   updateEligibleParticipantsList(); //刷新可抽獎人員/可抽禮物/中獎人員名單
   updateAvailablePrizesList();
   updateWinnersList();
-
+  checkAndToggleRaffleButton();
   document.getElementById("totalWinner").textContent = total_winner; //更新中獎總人數
 }
 
@@ -372,7 +380,7 @@ function cancelRaffle() {
   sortEligibleParticipantsListByRandom();
 }
 
-function downloadNotWinnersCSV() {
+/*function downloadNotWinnersCSV() {
   //操作邏輯同前
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const main_title = document.getElementById("main_title").value;
@@ -388,7 +396,7 @@ function downloadNotWinnersCSV() {
   });
 
   downloadCSV(filename, csvContent);
-}
+} */
 
 function downloadCSV(filename, csvContent) {
   const encodedUri = encodeURI(csvContent);
@@ -581,31 +589,29 @@ function checkInputs() {
   }
 }
 
-// 非數字無法輸入在畫面上
-// 獲取輸入框元素
-const drawSecondvalueMax_value = document.getElementById("drawSecondvalueMax");
-const drawSecondvalueMin_value = document.getElementById("drawSecondvalueMin");
+function checkAndToggleRaffleButton() {
+  // 檢查是否有可抽獎的人員和禮物
+  const canRaffle =
+    participants.length > 0 && gifts.some((gift) => gift.quantity > 0);
 
-// 添加事件監聽器
-drawSecondvalueMax_value.addEventListener("keydown", function (event) {
-  // 如果輸入的按鍵不是數字，則阻止輸入
-  if (
-    event.key !== "Backspace" &&
-    event.key !== "Delete" &&
-    isNaN(Number(event.key))
-  ) {
-    event.preventDefault();
-  }
-});
+  // 獲取開始抽獎按鈕元素
+  const startRaffleButton = document.getElementById("startRaffle-button");
 
-// 添加事件監聽器
-drawSecondvalueMin_value.addEventListener("keydown", function (event) {
-  // 如果輸入的按鍵不是數字，則阻止輸入
-  if (
-    event.key !== "Backspace" &&
-    event.key !== "Delete" &&
-    isNaN(Number(event.key))
-  ) {
-    event.preventDefault();
+  // 根據條件啟用或禁用開始抽獎按鈕
+  if (canRaffle === false) {
+    startRaffleButton.disabled = true;
   }
-});
+}
+
+function raffleCloseMessage(messageTitle, message) {
+  const errorModalElement = document.getElementById("errorModal"); //綁定index.html下的errorModal元件
+  const errorModalElementTitle = document.getElementById("errorModalTitle");
+  const errorModalMessageElement = document.getElementById("errorModalMessage"); //綁定index.html下的errorModalMessage元件
+
+  //設置彈出視窗的錯誤訊息
+  errorModalElementTitle.textContent = messageTitle;
+  errorModalMessageElement.textContent = message;
+
+  const errorModal = new bootstrap.Modal(errorModalElement); //顯示錯誤彈出視窗
+  errorModal.show();
+}
